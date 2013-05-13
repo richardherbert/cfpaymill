@@ -184,6 +184,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 */
 	public struct function addPreauthorization(required numeric amount, required string currency, string token, string payment) {
 		var packet = {};
+		var result = {};
 		var error = {};
 
 		packet.object = "preauthorizations";
@@ -344,6 +345,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 */
 	public struct function addTransaction(required numeric amount, required string currency, string token="", string payment="", string preauthorization="", string client="", string description="") {
 		var packet = {};
+		var result = {};
 
 		packet.object = "transactions";
 		packet.method = "POST";
