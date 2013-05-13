@@ -7,4 +7,4 @@ I expose a series of [Paymill API methods](https://www.paymill.com/en-gb/documen
 
 For a demo, documentation and more information, please visit [http://www.cfpaymill.com/](http://www.cfpaymill.com/ "cfPaymill").
 
-[http://www.cfpaymill.com/index.cfm/changelog/cfpaymill](Change log "Change log") added to website.
+[Change log](http://www.cfpaymill.com/index.cfm/changelog/cfpaymill "Change log") added to website.
