@@ -32,7 +32,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 * @hint I return the current version number
 */
 	public string function getVersion() {
-		return "0.1.1";
+		return "0.2";
 	}
 
 /*
