@@ -548,6 +548,22 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 
 						structUpdate(updatedDate.owner, "updated_at", newValue);
 					}
+
+					amounts = structFindKey(data, "amount", "all");
+
+					for (amount in amounts) {
+						newValue = convertAmountFromBase(amount.value);
+
+						structUpdate(amount.owner, "amount", newValue);
+					}
+
+					originAmounts = structFindKey(data, "origin_amount", "all");
+
+					for (originAmount in originAmounts) {
+						newValue = convertAmountFromBase(originAmount.value);
+
+						structUpdate(originAmount.owner, "origin_amount", newValue);
+					}
 				}
 			} else {
 				createdDates = structFindKey(result.data, "created_at", "all");
@@ -565,8 +581,23 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 
 					structUpdate(updatedDate.owner, "updated_at", newValue);
 				}
-			}
 
+				amounts = structFindKey(data, "amount", "all");
+
+				for (amount in amounts) {
+					newValue = convertAmountFromBase(amount.value);
+
+					structUpdate(amount.owner, "amount", newValue);
+				}
+
+				originAmounts = structFindKey(data, "origin_amount", "all");
+
+				for (originAmount in originAmounts) {
+					newValue = convertAmountFromBase(originAmount.value);
+
+					structUpdate(originAmount.owner, "origin_amount", newValue);
+				}
+			}
 		} else {
 			result["success"] = false;
 
