@@ -437,6 +437,9 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		return send(packet);
 	}
 
+/*
+* @hint I send the data packet to the http service
+*/
 	private struct function send(required struct inboundPacket) {
 		var packet = arguments.inboundPacket;
 		var param = "";
@@ -496,6 +499,9 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		return processResponse(response);
 	}
 
+/*
+* @hint I process the response data
+*/
 	private struct function processResponse(required struct response) {
 		var result = {};
 		var data = {};
