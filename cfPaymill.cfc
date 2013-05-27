@@ -102,7 +102,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 
 		packet.params = [];
 
-		arrayAppend(packet.params, {name="amount", value=arguments.amount});
+		arrayAppend(packet.params, {name="amount", value=convertAmountToBase(arguments.amount)});
 		arrayAppend(packet.params, {name="currency", value=arguments.currency});
 		arrayAppend(packet.params, {name="interval", value=arguments.interval});
 		arrayAppend(packet.params, {name="name", value=arguments.name});
@@ -192,7 +192,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 
 		packet.params = [];
 
-		arrayAppend(packet.params, {name="amount", value=arguments.amount});
+		arrayAppend(packet.params, {name="amount", value=convertAmountToBase(arguments.amount)});
 		arrayAppend(packet.params, {name="currency", value=arguments.currency});
 
 		if (trim(arguments.token) != "" && trim(arguments.payment) != "") {
@@ -263,7 +263,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		packet.params = [];
 
 		arrayAppend(packet.params, {name="id", value=arguments.transaction});
-		arrayAppend(packet.params, {name="amount", value=arguments.amount});
+		arrayAppend(packet.params, {name="amount", value=convertAmountToBase(arguments.amount)});
 		arrayAppend(packet.params, {name="description", value=arguments.description});
 
 		return send(packet);
@@ -352,7 +352,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 
 		packet.params = [];
 
-		arrayAppend(packet.params, {name="amount", value=arguments.amount});
+		arrayAppend(packet.params, {name="amount", value=convertAmountToBase(arguments.amount)});
 		arrayAppend(packet.params, {name="currency", value=arguments.currency});
 
 		if (arguments.token != "") {
