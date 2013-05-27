@@ -582,7 +582,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 					structUpdate(updatedDate.owner, "updated_at", newValue);
 				}
 
-				amounts = structFindKey(data, "amount", "all");
+				amounts = structFindKey(result.data, "amount", "all");
 
 				for (amount in amounts) {
 					newValue = convertAmountFromBase(amount.value);
@@ -590,7 +590,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 					structUpdate(amount.owner, "amount", newValue);
 				}
 
-				originAmounts = structFindKey(data, "origin_amount", "all");
+				originAmounts = structFindKey(result.data, "origin_amount", "all");
 
 				for (originAmount in originAmounts) {
 					newValue = convertAmountFromBase(originAmount.value);
