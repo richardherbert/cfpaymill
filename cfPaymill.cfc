@@ -573,11 +573,17 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		return result;
 	}
 
-	private numeric function getAmount(required numeric amount) {
+/*
+* @hint I convert the base unit amount to a currency amount
+*/
+	private numeric function convertAmountFromBase(required numeric amount) {
 		return arguments.amount / 100;
 	}
 
-	private void function setAmount(required numeric amount) {
+/*
+* @hint I convert the amount to the base currency unit
+*/
+	private numeric function convertAmountToBase(required numeric amount) {
 		return int(arguments.amount * 100);
 	}
 
