@@ -385,6 +385,13 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 	}
 
 /*
+* @hint I return the selected Transaction
+*/
+	public struct function getTransaction(required string id) {
+		return getObject("transactions", arguments.id);
+	}
+
+/*
 * @hint I return a list of Transactions
 */
 	public struct function getTransactions() {
