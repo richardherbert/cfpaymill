@@ -80,7 +80,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 /*
 * @hint I return a list of Clients
 */
-	public struct function getClients() {
+	public struct function getClients(numeric count=20, numeric offset=0) {
 		return getObjects(object="clients", params=arguments);
 	}
 
@@ -120,7 +120,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 /*
 * @hint I return a list of Offers
 */
-	public struct function getOffers() {
+	public struct function getOffers(numeric count=20, numeric offset=0) {
 		return getObjects(object="offers", params=arguments);
 	}
 
@@ -175,7 +175,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 /*
 * @hint I return a list of Payments
 */
-	public struct function getPayments() {
+	public struct function getPayments(numeric count=20, numeric offset=0) {
 		return getObjects(object="payments", params=arguments);
 	}
 
@@ -240,7 +240,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 /*
 * @hint I return a list of Preauthorizations
 */
-	public struct function getPreauthorizations() {
+	public struct function getPreauthorizations(numeric count=20, numeric offset=0) {
 		return getObjects(object="preauthorizations", params=arguments);
 	}
 
@@ -279,7 +279,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 /*
 * @hint I return a list of Refunds
 */
-	public struct function getRefunds() {
+	public struct function getRefunds(numeric count=20, numeric offset=0) {
 		return getObjects(object="refunds", params=arguments);
 	}
 
@@ -329,7 +329,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 /*
 * @hint I return a list of Subscriptions
 */
-	public struct function getSubscriptions() {
+	public struct function getSubscriptions(numeric count=20, numeric offset=0) {
 		return getObjects(object="refunds", params=arguments);
 	}
 
@@ -394,7 +394,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 /*
 * @hint I return a list of Transactions
 */
-	public struct function getTransactions() {
+	public struct function getTransactions(numeric count=20, numeric offset=0) {
 		return getObjects(object="transactions", params=arguments);
 	}
 
