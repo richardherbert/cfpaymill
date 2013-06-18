@@ -501,6 +501,14 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		httpService.setURL(endpointURL);
 		httpService.setMethod(packet.method);
 
+		httpService.addParam(name="wrapper", value="cfPaymill", type="header");
+
+/*
+writedump(var='#httpService.getParams()#', label='params', expand=1, abort=0);
+writedump(var='#httpService.getAttributes()#', label='attributes', expand=1, abort=0);
+abort;
+*/
+
 		response = httpService.send().getPrefix();
 
 		return processResponse(response);
