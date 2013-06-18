@@ -541,6 +541,9 @@ abort;
 		if (statusCode == "200") {
 			result["success"] = true;
 
+// replace all the "null" subscription values in the JSON packet with a ColdFusion empty array
+			fileContentJSON = reReplaceNoCase(fileContentJSON, '"subscription":null', '"subscription":[ ]', "all");
+
 // replace all the "null" values in the JSON packet with a ColdFusion empty string
 			fileContentJSON = reReplaceNoCase(fileContentJSON, ':null', ':""', "all");
 
