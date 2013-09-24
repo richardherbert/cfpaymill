@@ -487,15 +487,9 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		var fileContentJSON = "";
 		var statusCode = "";
 
-		if (server.coldfusion.productName == "ColdFusion Server") {
-			fileContentJSON = response.filecontent.toString();
-			statusCode = response.responseHeader.status_code;
-			statusText = response.responseHeader.explanation;
-		} else {
-			fileContentJSON = response.filecontent;
-			statusCode = response.status_code;
-			statusText = response.status_text;
-		}
+		fileContentJSON = arguments.response.filecontent.toString();
+		statusCode = arguments.response.responseHeader.status_code;
+		statusText = arguments.response.responseHeader.explanation;
 
 		if (statusCode == "200") {
 			result["success"] = true;
