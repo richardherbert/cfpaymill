@@ -15,12 +15,14 @@ limitations under the License.
 */
 
 component output="false" displayname="cfPaymill" hint="I am a ColdFusion component that provides an interface to the Paymill API" {
-	public cfPaymill function init(required string privateKey, string publicKey="", string apiEndpoint="https://api.paymill.com/v2/")
+	public cfPaymill function init(required string privateKey, string publicKey="", string apiEndpoint="https://api.paymill.com/v2/", string logfile="")
 		hint="I am the intitialise method that is fired upon instantiation"
 	{
 		variables.privateKey = arguments.privateKey;
 		variables.publicKey = arguments.publicKey;
 		variables.apiEndpoint = arguments.apiEndpoint;
+
+		variables.logfile = arguments.logfile;
 
 		variables.charset = "utf-8";
 
@@ -419,6 +421,8 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		var bodyValue = "";
 		var response = "";
 		var httpService = new http();
+		var cfPaymillLog = {};
+		var cfPaymillLogFileHandle = "";
 
 		param name="packet.id" default="";
 		param name="packet.method" default="GET";
@@ -470,6 +474,24 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		httpService.addParam(name="wrapper", value="cfPaymill", type="header");
 
 		response = httpService.send().getPrefix();
+
+		if (variables.logfile != "") {
+			cfPaymillLog["datetime"] = dateFormat(now(), 'yyyy-mm-dd ') & timeFormat(now(), 'HH:mm:ss');
+
+			cfPaymillLog["request"] = {};
+
+			cfPaymillLog.request["attributes"] = httpService.getAttributes();
+			cfPaymillLog.request["params"] = httpService.getParams();
+
+			cfPaymillLog["response"] = deserializeJSON(response.filecontent.toString());
+
+			lock name="cfPaymillLog" type="exclusive" timeout="30" {
+				cfPaymillLogFileHandle = fileOpen(variables.logfile, "append");
+
+				fileWriteLine(cfPaymillLogFileHandle, serializeJSON(cfPaymillLog));
+				fileClose(cfPaymillLogFileHandle);
+			}
+		}
 
 		return processResponse(response);
 	}
