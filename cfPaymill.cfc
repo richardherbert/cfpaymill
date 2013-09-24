@@ -15,10 +15,9 @@ limitations under the License.
 */
 
 component output="false" displayname="cfPaymill" hint="I am a ColdFusion component that provides an interface to the Paymill API" {
-/*
-* @hint I am the intitialise method that is fired upon instantiation
-*/
-	public cfPaymill function init(required string privateKey, string publicKey="", string apiEndpoint="https://api.paymill.com/v2/") {
+	public cfPaymill function init(required string privateKey, string publicKey="", string apiEndpoint="https://api.paymill.com/v2/")
+		hint="I am the intitialise method that is fired upon instantiation"
+	{
 		variables.privateKey = arguments.privateKey;
 		variables.publicKey = arguments.publicKey;
 		variables.apiEndpoint = arguments.apiEndpoint;
@@ -28,17 +27,15 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		return this;
 	}
 
-/*
-* @hint I return the current version number
-*/
-	public string function getVersion() {
+	public string function getVersion()
+		hint="I return the current version number"
+	{
 		return "0.2.1";
 	}
 
-/*
-* @hint I add a new Client
-*/
-	public struct function addClient(string email="", string description="") {
+	public struct function addClient(string email="", string description="")
+		hint="I add a new Client"
+	{
 		var packet = {};
 
 		packet.object = "clients";
@@ -52,10 +49,9 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		return send(packet);
 	}
 
-/*
-* @hint I update a Client
-*/
-	public struct function updateClient(required string id, string email="", string description="") {
+	public struct function updateClient(required string id, string email="", string description="")
+		hint="I update a Client"
+	{
 		var packet = {};
 
 		packet.id = arguments.id;
@@ -70,31 +66,27 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		return send(packet);
 	}
 
-/*
-* @hint I return the selected Client
-*/
-	public struct function getClient(required string id) {
+	public struct function getClient(required string id)
+		hint="I return the selected Client"
+	{
 		return getObject("clients", arguments.id);
 	}
 
-/*
-* @hint I return a list of Clients
-*/
-	public struct function getClients(numeric count=20, numeric offset=0) {
+	public struct function getClients(numeric count=20, numeric offset=0)
+		hint="I return a list of Clients"
+	{
 		return getObjects(object="clients", params=arguments);
 	}
 
-/*
-* @hint I delete the selected Client
-*/
-	public struct function deleteClient(required string id) {
+	public struct function deleteClient(required string id)
+		hint="I delete the selected Client"
+	{
 		return deleteObject(object="clients", id=arguments.id);
 	}
 
-/*
-* @hint I add a new Offer
-*/
-	public struct function addOffer(required numeric amount, required string currency, required string interval, required string name) {
+	public struct function addOffer(required numeric amount, required string currency, required string interval, required string name)
+		hint="I add a new Offer"
+	{
 		var packet = {};
 
 		packet.object = "offers";
@@ -110,24 +102,21 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		return send(packet);
 	}
 
-/*
-* @hint I return the selected Offer
-*/
-	public struct function getOffer(required string id) {
+	public struct function getOffer(required string id)
+		hint="I return the selected Offer"
+	{
 		return getObject("offers", arguments.id);
 	}
 
-/*
-* @hint I return a list of Offers
-*/
-	public struct function getOffers(numeric count=20, numeric offset=0) {
+	public struct function getOffers(numeric count=20, numeric offset=0)
+		hint="I return a list of Offers"
+	{
 		return getObjects(object="offers", params=arguments);
 	}
 
-/*
-* @hint I update a Offer
-*/
-	public struct function updateOffer(required string id, required string name="") {
+	public struct function updateOffer(required string id, required string name="")
+		hint="I update a Offer"
+	{
 		var packet = {};
 
 		packet.id = arguments.id;
@@ -141,17 +130,15 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		return send(packet);
 	}
 
-/*
-* @hint I delete the selected Offer
-*/
-	public struct function deleteOffer(required string id) {
+	public struct function deleteOffer(required string id)
+		hint="I delete the selected Offer"
+	{
 		return deleteObject(object="offers", id=arguments.id);
 	}
 
-/*
-* @hint I add a new Payment
-*/
-	public struct function addPayment(required string token, string client="") {
+	public struct function addPayment(required string token, string client="")
+		hint="I add a new Payment"
+	{
 		var packet = {};
 
 		packet.object = "payments";
@@ -165,24 +152,21 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		return send(packet);
 	}
 
-/*
-* @hint I return the selected Payment
-*/
-	public struct function getPayment(required string id) {
+	public struct function getPayment(required string id)
+		hint="I return the selected Payment"
+	{
 		return getObject("payments", arguments.id);
 	}
 
-/*
-* @hint I return a list of Payments
-*/
-	public struct function getPayments(numeric count=20, numeric offset=0) {
+	public struct function getPayments(numeric count=20, numeric offset=0)
+		hint="I return a list of Payments"
+	{
 		return getObjects(object="payments", params=arguments);
 	}
 
-/*
-* @hint I add a new Preauthorization
-*/
-	public struct function addPreauthorization(required numeric amount, required string currency, string token, string payment) {
+	public struct function addPreauthorization(required numeric amount, required string currency, string token, string payment)
+		hint="I add a new Preauthorization"
+	{
 		var packet = {};
 		var result = {};
 		var error = {};
@@ -230,31 +214,27 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		return send(packet);
 	}
 
-/*
-* @hint I return the selected Preauthorization
-*/
-	public struct function getPreauthorization(required string id) {
+	public struct function getPreauthorization(required string id)
+		hint="I return the selected Preauthorization"
+	{
 		return getObject("preauthorizations", arguments.id);
 	}
 
-/*
-* @hint I return a list of Preauthorizations
-*/
-	public struct function getPreauthorizations(numeric count=20, numeric offset=0) {
+	public struct function getPreauthorizations(numeric count=20, numeric offset=0)
+		hint="I return a list of Preauthorizations"
+	{
 		return getObjects(object="preauthorizations", params=arguments);
 	}
 
-/*
-* @hint I delete the selected Preauthorization
-*/
-	public struct function deletePreauthorization(required string id) {
+	public struct function deletePreauthorization(required string id)
+		hint="I delete the selected Preauthorization"
+	{
 		return deleteObject(object="preauthorizations", id=arguments.id);
 	}
 
-/*
-* @hint I add a new Refund
-*/
-	public struct function addRefund(required string transaction, required numeric amount, required string description) {
+	public struct function addRefund(required string transaction, required numeric amount, required string description)
+		hint="I add a new Refund"
+	{
 		var packet = {};
 
 		packet.object = "refunds";
@@ -269,24 +249,21 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		return send(packet);
 	}
 
-/*
-* @hint I return the selected Refund
-*/
-	public struct function getRefund(required string id) {
+	public struct function getRefund(required string id)
+		hint="I return the selected Refund"
+	{
 		return getObject("refunds", arguments.id);
 	}
 
-/*
-* @hint I return a list of Refunds
-*/
-	public struct function getRefunds(numeric count=20, numeric offset=0) {
+	public struct function getRefunds(numeric count=20, numeric offset=0)
+		hint="I return a list of Refunds"
+	{
 		return getObjects(object="refunds", params=arguments);
 	}
 
-/*
-* @hint I add a new Subscription
-*/
-	public struct function addSubscription(required string client, required string offer, required string payment) {
+	public struct function addSubscription(required string client, required string offer, required string payment)
+		hint="I add a new Subscription"
+	{
 		var packet = {};
 
 		packet.object = "subscriptions";
@@ -301,10 +278,9 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		return send(packet);
 	}
 
-/*
-* @hint I update a Subscription
-*/
-	public struct function updateSubscription(required string id, required boolean cancel, required string offer) {
+	public struct function updateSubscription(required string id, required boolean cancel, required string offer)
+		hint="I update a Subscription"
+	{
 		var packet = {};
 
 		packet.id = arguments.id;
@@ -319,31 +295,27 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		return send(packet);
 	}
 
-/*
-* @hint I return the selected Subscription
-*/
-	public struct function getSubscription(required string id) {
+	public struct function getSubscription(required string id)
+		hint="I return the selected Subscription"
+	{
 		return getObject("subscriptions", arguments.id);
 	}
 
-/*
-* @hint I return a list of Subscriptions
-*/
-	public struct function getSubscriptions(numeric count=20, numeric offset=0) {
+	public struct function getSubscriptions(numeric count=20, numeric offset=0)
+		hint="I return a list of Subscriptions"
+	{
 		return getObjects(object="refunds", params=arguments);
 	}
 
-/*
-* @hint I delete the selected Subscription
-*/
-	public struct function deleteSubscription(required string id) {
+	public struct function deleteSubscription(required string id)
+		hint="I delete the selected Subscription"
+	{
 		return deleteObject(object="subscriptions", id=arguments.id);
 	}
 
-/*
-* @hint I create a new Transaction
-*/
-	public struct function addTransaction(required numeric amount, required string currency, string token="", string payment="", string preauthorization="", string client="", string description="") {
+	public struct function addTransaction(required numeric amount, required string currency, string token="", string payment="", string preauthorization="", string client="", string description="")
+		hint="I create a new Transaction"
+	{
 		var packet = {};
 		var result = {};
 
@@ -384,24 +356,21 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		return send(packet);
 	}
 
-/*
-* @hint I return the selected Transaction
-*/
-	public struct function getTransaction(required string id) {
+	public struct function getTransaction(required string id)
+		hint="I return the selected Transaction"
+	{
 		return getObject("transactions", arguments.id);
 	}
 
-/*
-* @hint I return a list of Transactions
-*/
-	public struct function getTransactions(numeric count=20, numeric offset=0) {
+	public struct function getTransactions(numeric count=20, numeric offset=0)
+		hint="I return a list of Transactions"
+	{
 		return getObjects(object="transactions", params=arguments);
 	}
 
-/*
-* @hint I return the selected Object
-*/
-	private struct function getObject(required string object, required string id) {
+	private struct function getObject(required string object, required string id)
+		hint="I return the selected Object"
+	{
 		var packet = {};
 
 		packet.object = arguments.object;
@@ -411,10 +380,9 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		return send(packet);
 	}
 
-/*
-* @hint I return a list of Objects
-*/
-	private struct function getObjects(required string object, struct params={}) {
+	private struct function getObjects(required string object, struct params={})
+		hint="I return a list of Objects"
+	{
 		var packet = {};
 		var param = "";
 
@@ -431,10 +399,9 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		return send(packet);
 	}
 
-/*
-* @hint I delete the selected Object
-*/
-	private struct function deleteObject(required string object, required string id) {
+	private struct function deleteObject(required string object, required string id)
+		hint="I delete the selected Object"
+	{
 		var packet = {};
 
 		packet.object = arguments.object;
@@ -444,10 +411,9 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		return send(packet);
 	}
 
-/*
-* @hint I send the data packet to the http service
-*/
-	private struct function send(required struct inboundPacket) {
+	private struct function send(required struct inboundPacket)
+		hint="I send the data packet to the http service"
+	{
 		var packet = arguments.inboundPacket;
 		var param = "";
 		var bodyValue = "";
@@ -503,21 +469,14 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 
 		httpService.addParam(name="wrapper", value="cfPaymill", type="header");
 
-/*
-writedump(var='#httpService.getParams()#', label='params', expand=1, abort=0);
-writedump(var='#httpService.getAttributes()#', label='attributes', expand=1, abort=0);
-abort;
-*/
-
 		response = httpService.send().getPrefix();
 
 		return processResponse(response);
 	}
 
-/*
-* @hint I process the response data
-*/
-	private struct function processResponse(required struct response) {
+	private struct function processResponse(required struct response)
+		hint="I process the response data"
+	{
 		var result = {};
 		var data = {};
 		var createdDate = {};
@@ -628,24 +587,21 @@ abort;
 		return result;
 	}
 
-/*
-* @hint I convert the base unit amount to a currency amount
-*/
-	private numeric function convertAmountFromBase(required numeric amount) {
+	private numeric function convertAmountFromBase(required numeric amount)
+		hint="I convert the base unit amount to a currency amount"
+	{
 		return arguments.amount / 100;
 	}
 
-/*
-* @hint I convert the amount to the base currency unit
-*/
-	private numeric function convertAmountToBase(required numeric amount) {
+	private numeric function convertAmountToBase(required numeric amount)
+		hint="I convert the amount to the base currency unit"
+	{
 		return int(arguments.amount * 100);
 	}
 
-/*
-* @hint I return a ColdFusion Date type when given a Unix Epoch timestamp integer
-*/
-	private date function getDate(required numeric timestamp) {
+	private date function getDate(required numeric timestamp)
+		hint="I return a ColdFusion Date type when given a Unix Epoch timestamp integer"
+	{
 // Epoch datetime returned by Paymill is UTC. Convert to locale.
 
 // http://rob.brooks-bilson.com/index.cfm/2007/10/11/Some-Notes-on-Using-Epoch-Time-in-ColdFusion
