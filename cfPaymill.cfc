@@ -624,6 +624,15 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		return dateAdd("s", arguments.timestamp, dateConvert("utc2Local", createDate(1970, 1, 1)));
 	}
 
+	private string function convertEpochDates(required string match, required struct found, required numeric offset, required string string)
+		hint="I return a ColdFusion datetime object from an Epoch date"
+	{
+		var foundEpochDate = arguments.found.substring[2];
+		var convertedDate = getDate(foundEpochDate);
+
+		return replaceNoCase(arguments.match, foundEpochDate, '"#convertedDate#"');
+	}
+
 /**
  * This library is part of the Common Function Library Project. An open source
  * collection of UDF libraries designed for ColdFusion 5.0 and higher. For more information,
