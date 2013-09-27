@@ -633,6 +633,15 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		return replaceNoCase(arguments.match, foundEpochDate, '"#convertedDate#"');
 	}
 
+	private string function convertAmountsFromBase(required string match, required struct found, required numeric offset, required string string)
+		hint="I return a currency amount from a base amount"
+	{
+		var foundAmount = arguments.found.substring[2];
+		var convertedAmount = convertAmountFromBase(foundAmount);
+
+		return replaceNoCase(arguments.match, foundAmount, convertedAmount);
+	}
+
 /**
  * This library is part of the Common Function Library Project. An open source
  * collection of UDF libraries designed for ColdFusion 5.0 and higher. For more information,
