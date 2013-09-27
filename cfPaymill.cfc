@@ -384,6 +384,33 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		return getObjects(object="transactions", params=arguments);
 	}
 
+	public struct function parseWebhook(required any httpPOST)
+		hint="I parse a webhook POST packet and return the data as a structure"
+	{
+		var content = arguments.httpPOST.content.toString();
+
+		if (content == "") {
+			var response["event"]["event_type"] = "none.found";
+
+			return response;
+		}
+
+// replace all the "null" values in the JSON packet with a ColdFusion empty string
+		content = reReplaceNoCase(content, ":null", ':""', "all");
+
+// convert all the epoch date in the JSON packet values to ColdFusion datetime objects
+		for (var epochDateRegEx in variables.epochDatesToConvert) {
+			content = replaceWithCallback(content, epochDateRegEx, convertEpochDates, 'all', false);
+		}
+
+// convert all the in the JSON packet base amounts to currency amounts
+		for (var baseAmountRegEx in variables.baseAmountsToConvert) {
+			content = replaceWithCallback(content, baseAmountRegEx, convertAmountsFromBase, 'all', false);
+		}
+
+		return deserializeJSON(content);
+	}
+
 	private struct function getObject(required string object, required string id)
 		hint="I return the selected Object"
 	{
