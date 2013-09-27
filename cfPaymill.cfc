@@ -26,6 +26,20 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 
 		variables.charset = "utf-8";
 
+		variables.epochDatesToConvert = [];
+
+		arrayAppend(variables.epochDatesToConvert, '"created_at":(\d*)');
+		arrayAppend(variables.epochDatesToConvert, '"updated_at":(\d*)');
+		arrayAppend(variables.epochDatesToConvert, '"next_capture_at":(\d*)');
+		arrayAppend(variables.epochDatesToConvert, '"canceled_at":(\d*)');
+		arrayAppend(variables.epochDatesToConvert, '"trial_start":(\d*)');
+		arrayAppend(variables.epochDatesToConvert, '"trial_end":(\d*)');
+
+		variables.baseAmountsToConvert = [];
+
+		arrayAppend(variables.baseAmountsToConvert, '"amount":"(\d*)"');
+		arrayAppend(variables.baseAmountsToConvert, '"origin_amount":(\d*)');
+
 		return this;
 	}
 
