@@ -623,4 +623,81 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 
 		return dateAdd("s", arguments.timestamp, dateConvert("utc2Local", createDate(1970, 1, 1)));
 	}
+
+/**
+ * This library is part of the Common Function Library Project. An open source
+ * collection of UDF libraries designed for ColdFusion 5.0 and higher. For more information,
+ * please see the web site at:
+ *
+ * http://www.cflib.org
+ *
+ * Warning:
+ * You may not need all the functions in this library. If speed
+ * is _extremely_ important, you may want to consider deleting
+ * functions you do not plan on using. Normally you should not
+ * have to worry about the size of the library.
+ *
+ * License:
+ * This code may be used freely.
+ * You may modify this code as you see fit, however, this header, and the header
+ * for the functions must remain intact.
+ *
+ * This code is provided as is.  We make no warranty or guarantee.  Use of this code is at your own risk.
+ *
+ * Analogous to reReplace()/reReplaceNoCase(), except the replacement is the result of a callback, not a hard-coded string
+ * v1.0 by Adam Cameron
+ *
+ * @param string 	 The string to process (Required)
+ * @param regex 	 The regular expression to match (Required)
+ * @param callback 	 A UDF which takes arguments match (substring matched), found (a struct of keys pos,len,substring, which is subexpression breakdown of the match), offset (where in the string the match was found), string (the string the match was found within) (Required)
+ * @param scope 	 Number of replacements to make: either ONE or ALL (Optional)
+ * @param caseSensitive 	 Whether the regex is handled case-sensitively (Optional)
+ * @return A string with substitutions made
+ * @author Adam Cameron (dac.cfml@gmail.com)
+ * @version 1.0, July 18, 2013
+ */
+	private string function replaceWithCallback(required string string, required string regex, required any callback, string scope="ONE", boolean caseSensitive=true){
+		if (!isCustomFunction(callback)) { // for CF10 we could specify a type of "function", but not in CF9
+			throw(type="Application", message="Invalid callback argument value", detail="The callback argument of the replaceWithCallback() function must itself be a function reference.");
+		}
+		if (!isValid("regex", scope, "(?i)ONE|ALL")) {
+			throw(type="Application", message="The scope argument of the replaceWithCallback() function has an invalid value #scope#.", detail="Allowed values are ONE, ALL.");
+		}
+
+		var startAt	= 1;
+
+		while (true){	// there's multiple exit conditions in multiple places in the loop, so deal with exit conditions when appropriate rather than here
+			if (caseSensitive) {
+				var found = reFind(regex, string, startAt, true);
+			} else {
+				var found = reFindNoCase(regex, string, startAt, true);
+			}
+
+			if (!found.pos[1]) { // ie: it didn't find anything
+				break;
+			}
+
+			found['substring']=[];	// as well as the usual pos and len that CF gives us, we're gonna pass the actual substrings too
+
+			for (var i=1; i <= arrayLen(found.pos); i++) {
+				found.substring[i] = mid(string, found.pos[i], found.len[i]);
+			}
+
+			var match = mid(string, found.pos[1], found.len[1]);
+			var offset = found.pos[1];
+
+			var replacement = callback(match, found, offset, string);
+
+			string = removeChars(string, found.pos[1], found.len[1]);
+			string = insert(replacement, string, found.pos[1]-1);
+
+			if (scope=="ONE") {
+				break;
+			}
+
+			startAt = found.pos[1] + len(replacement);
+		}
+
+		return string;
+	}
 }
