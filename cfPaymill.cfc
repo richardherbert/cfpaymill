@@ -395,9 +395,6 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 			return response;
 		}
 
-// replace all the "null" values in the JSON packet with a ColdFusion empty string
-		content = reReplaceNoCase(content, ":null", ':""', "all");
-
 // convert all the epoch date in the JSON packet values to ColdFusion datetime objects
 		for (var epochDateRegEx in variables.epochDatesToConvert) {
 			content = replaceWithCallback(content, epochDateRegEx, convertEpochDates, 'all', false);
@@ -407,6 +404,12 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		for (var baseAmountRegEx in variables.baseAmountsToConvert) {
 			content = replaceWithCallback(content, baseAmountRegEx, convertAmountsFromBase, 'all', false);
 		}
+
+// replace all the "null" subscription values in the JSON packet with a ColdFusion empty array
+		content = reReplaceNoCase(content, '"subscription":null', '"subscription":[ ]', "all");
+
+// replace all the "null" values in the JSON packet with a ColdFusion empty string
+		content = reReplaceNoCase(content, ":null", ':""', "all");
 
 		return deserializeJSON(content);
 	}
