@@ -674,9 +674,14 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		hint="I return a ColdFusion datetime object from an Epoch date"
 	{
 		var foundEpochDate = arguments.found.substring[2];
-		var convertedDate = getDate(foundEpochDate);
 
-		return replaceNoCase(arguments.match, foundEpochDate, '"#convertedDate#"');
+		if (foundEpochDate == "") {
+			return arguments.match;
+		} else {
+			var convertedDate = getDate(foundEpochDate);
+
+			return replaceNoCase(arguments.match, foundEpochDate, '"#convertedDate#"');
+		}
 	}
 
 	private string function convertAmountsFromBase(required string match, required struct found, required numeric offset, required string string)
