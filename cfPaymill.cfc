@@ -387,7 +387,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 	public struct function parseWebhook(required any httpPOST)
 		hint="I parse a webhook POST packet and return the data as a structure"
 	{
-		var content = arguments.httpPOST.content.toString();
+		var content = toString(arguments.httpPOST.content);
 
 		if (content == "") {
 			var response["event"]["event_type"] = "none.found";
