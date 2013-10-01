@@ -46,7 +46,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 	public string function getVersion()
 		hint="I return the current version number"
 	{
-		return "0.2.2";
+		return "0.3.0";
 	}
 
 	public struct function addClient(string email="", string description="")
