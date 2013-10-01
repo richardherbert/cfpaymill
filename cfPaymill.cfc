@@ -525,7 +525,6 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 			cfPaymillLog["request"] = {};
 
 			cfPaymillLog.request["attributes"] = httpService.getAttributes();
-			cfPaymillLog.request["params"] = httpService.getParams();
 
 			cfPaymillLog["response"] = deserializeJSON(response.filecontent.toString());
 
