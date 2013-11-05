@@ -570,6 +570,18 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 
 			result["data"] = fileContent.data;
 
+			if (structKeyExists(fileContent, "data_count")) {
+				result["data_count"] = fileContent.data_count;
+			} else {
+				result["data_count"] = 1;
+			}
+
+			if (structKeyExists(fileContent, "mode")) {
+				result["mode"] = fileContent.mode;
+			} else {
+				result["mode"] = "Unknown";
+			}
+
 			if (isArray(result.data)) {
 				for (data in result.data) {
 					createdDates = structFindKey(data, "created_at", "all");
