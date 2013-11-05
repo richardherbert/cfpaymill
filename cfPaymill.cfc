@@ -550,6 +550,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		var createdDates = "";
 		var updatedDates = "";
 		var fileContentJSON = "";
+		var fileContent = {};
 		var statusCode = "";
 
 		fileContentJSON = arguments.response.filecontent.toString();
@@ -565,7 +566,9 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 // replace all the "null" values in the JSON packet with a ColdFusion empty string
 			fileContentJSON = reReplaceNoCase(fileContentJSON, ':null', ':""', "all");
 
-			result["data"] = deserializeJSON(fileContentJSON).data;
+			fileContent = deserializeJSON(fileContentJSON);
+
+			result["data"] = fileContent.data;
 
 			if (isArray(result.data)) {
 				for (data in result.data) {
@@ -637,7 +640,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		} else {
 			result["success"] = false;
 
-			result["error"] = deserializeJSON(fileContentJSON).error;
+			result["error"] = fileContent.error;
 		}
 
 		result["code"] = statusCode;
