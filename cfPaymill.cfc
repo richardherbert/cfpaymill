@@ -26,13 +26,69 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 
 		variables.charset = "utf-8";
 
+		variables.epochDatesToConvert = [];
+
+		arrayAppend(variables.epochDatesToConvert, '"created_at":(\d*)');
+		arrayAppend(variables.epochDatesToConvert, '"updated_at":(\d*)');
+		arrayAppend(variables.epochDatesToConvert, '"next_capture_at":(\d*)');
+		arrayAppend(variables.epochDatesToConvert, '"canceled_at":(\d*)');
+		arrayAppend(variables.epochDatesToConvert, '"trial_start":(\d*)');
+		arrayAppend(variables.epochDatesToConvert, '"trial_end":(\d*)');
+
+		variables.baseAmountsToConvert = [];
+
+		arrayAppend(variables.baseAmountsToConvert, '"amount":"(\d*)"');
+		arrayAppend(variables.baseAmountsToConvert, '"origin_amount":(\d*)');
+
+// Paymill response code messages
+		variables.responseMessage["10001"] = 'General undefined response';
+		variables.responseMessage["10002"] = 'Still waiting on something';
+
+		variables.responseMessage["20000"] = 'General success response';
+
+		variables.responseMessage["40000"] = 'General problem with data';
+		variables.responseMessage["40001"] = 'General problem with payment data';
+		variables.responseMessage["40100"] = 'Problem with credit card data';
+		variables.responseMessage["40101"] = 'Problem with cvv';
+		variables.responseMessage["40102"] = 'Card expired or not yet valid';
+		variables.responseMessage["40103"] = 'Limit exceeded';
+		variables.responseMessage["40104"] = 'Card invalid';
+		variables.responseMessage["40105"] = 'Expiry date not valid';
+		variables.responseMessage["40106"] = 'Credit card brand required';
+		variables.responseMessage["40200"] = 'Problem with bank account data';
+		variables.responseMessage["40201"] = 'Bank account data combination mismatch';
+		variables.responseMessage["40202"] = 'User authentication failed';
+		variables.responseMessage["40300"] = 'Problem with 3d secure data';
+		variables.responseMessage["40301"] = 'Currency / amount mismatch';
+		variables.responseMessage["40400"] = 'Problem with input data';
+		variables.responseMessage["40401"] = 'Amount too low or zero';
+		variables.responseMessage["40402"] = 'Usage field too long';
+		variables.responseMessage["40403"] = 'Currency not allowed';
+
+		variables.responseMessage["50000"] = 'General problem with backend';
+		variables.responseMessage["50001"] = 'Country blacklisted';
+		variables.responseMessage["50100"] = 'Technical error with credit card';
+		variables.responseMessage["50101"] = 'Error limit exceeded';
+		variables.responseMessage["50102"] = 'Card declined by authorization system';
+		variables.responseMessage["50103"] = 'Manipulation or stolen card';
+		variables.responseMessage["50104"] = 'Card restricted';
+		variables.responseMessage["50105"] = 'Invalid card configuration data';
+		variables.responseMessage["50200"] = 'Technical error with bank account';
+		variables.responseMessage["50201"] = 'Card blacklisted';
+		variables.responseMessage["50300"] = 'Technical error with 3D secure';
+		variables.responseMessage["50400"] = 'Decline because of risk issues';
+		variables.responseMessage["50500"] = 'General timeout';
+		variables.responseMessage["50501"] = 'Timeout on side of the acquirer';
+		variables.responseMessage["50502"] = 'Risk management transaction timeout';
+		variables.responseMessage["50600"] = 'Duplicate transaction';
+
 		return this;
 	}
 
 	public string function getVersion()
 		hint="I return the current version number"
 	{
-		return "0.2.2";
+		return "0.3.0";
 	}
 
 	public struct function addClient(string email="", string description="")
@@ -166,7 +222,13 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		return getObjects(object="payments", params=arguments);
 	}
 
-	public struct function addPreauthorization(required numeric amount, required string currency, string token, string payment)
+	public struct function deletePayment(required string id)
+		hint="I delete the selected Payment"
+	{
+		return deleteObject(object="payments", id=arguments.id);
+	}
+
+	public struct function addPreauthorization(required numeric amount, required string currency, string payment="", string token="")
 		hint="I add a new Preauthorization"
 	{
 		var packet = {};
@@ -263,7 +325,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		return getObjects(object="refunds", params=arguments);
 	}
 
-	public struct function addSubscription(required string client, required string offer, required string payment)
+	public struct function addSubscription(required string offer, required string payment, string client="", date startDate=createDate(1970, 1, 1))
 		hint="I add a new Subscription"
 	{
 		var packet = {};
@@ -273,9 +335,16 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 
 		packet.params = [];
 
-		arrayAppend(packet.params, {name="client", value=arguments.client});
 		arrayAppend(packet.params, {name="offer", value=arguments.offer});
 		arrayAppend(packet.params, {name="payment", value=arguments.payment});
+
+		if (arguments.client != "") {
+			arrayAppend(packet.params, {name="client", value=arguments.client});
+		}
+
+		if (arguments.startDate != createDate(1970, 1, 1)) {
+			arrayAppend(packet.params, {name="start_at", value=getEpochTimeFromLocal(arguments.startDate)});
+		}
 
 		return send(packet);
 	}
@@ -368,6 +437,46 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		hint="I return a list of Transactions"
 	{
 		return getObjects(object="transactions", params=arguments);
+	}
+
+	public struct function parseWebhook(required any httpPOST)
+		hint="I parse a webhook POST packet and return the data as a structure"
+	{
+		var content = toString(arguments.httpPOST.content);
+
+		if (content == "") {
+			var response["event"]["event_type"] = "none.found";
+
+			return response;
+		}
+
+// convert all the epoch date in the JSON packet values to ColdFusion datetime objects
+		for (var epochDateRegEx in variables.epochDatesToConvert) {
+			content = replaceWithCallback(content, epochDateRegEx, convertEpochDates, 'all', false);
+		}
+
+// convert all the in the JSON packet base amounts to currency amounts
+		for (var baseAmountRegEx in variables.baseAmountsToConvert) {
+			content = replaceWithCallback(content, baseAmountRegEx, convertAmountsFromBase, 'all', false);
+		}
+
+// replace all the "null" subscription values in the JSON packet with a ColdFusion empty array
+		content = reReplaceNoCase(content, '"subscription":null', '"subscription":[ ]', "all");
+
+// replace all the "null" values in the JSON packet with a ColdFusion empty string
+		content = reReplaceNoCase(content, ":null", ':""', "all");
+
+		return deserializeJSON(content);
+	}
+
+	public string function getResponseMessage(required string responseCode)
+		hint="I return the response message for the given response code"
+	{
+		if (structKeyExists(variables.responseMessage, arguments.responseCode)) {
+			return variables.responseMessage[arguments.responseCode];
+		} else {
+			return "";
+		}
 	}
 
 	private struct function getObject(required string object, required string id)
@@ -481,7 +590,6 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 			cfPaymillLog["request"] = {};
 
 			cfPaymillLog.request["attributes"] = httpService.getAttributes();
-			cfPaymillLog.request["params"] = httpService.getParams();
 
 			cfPaymillLog["response"] = deserializeJSON(response.filecontent.toString());
 
@@ -515,6 +623,9 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 
 		if (statusCode == "200") {
 			result["success"] = true;
+
+// replace all the "null" subscription values in the JSON packet with a ColdFusion empty array
+			fileContentJSON = reReplaceNoCase(fileContentJSON, '"subscription":null', '"subscription":[ ]', "all");
 
 // replace all the "null" values in the JSON packet with a ColdFusion empty string
 			fileContentJSON = reReplaceNoCase(fileContentJSON, ':null', ':""', "all");
@@ -622,5 +733,109 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 // http://www.epochconverter.com/epoch/timezones.php
 
 		return dateAdd("s", arguments.timestamp, dateConvert("utc2Local", createDate(1970, 1, 1)));
+	}
+
+	private numeric function getEpochTimeFromLocal(required date dateTime=now()) {
+		return dateDiff("s", dateConvert("utc2Local", createDate(1970, 1, 1)), datetime);
+	}
+
+	private string function convertEpochDates(required string match, required struct found, required numeric offset, required string string)
+		hint="I return a ColdFusion datetime object from an Epoch date"
+	{
+		var foundEpochDate = arguments.found.substring[2];
+
+		if (foundEpochDate == "") {
+			return arguments.match;
+		} else {
+			var convertedDate = getDate(foundEpochDate);
+
+			return replaceNoCase(arguments.match, foundEpochDate, '"#convertedDate#"');
+		}
+	}
+
+	private string function convertAmountsFromBase(required string match, required struct found, required numeric offset, required string string)
+		hint="I return a currency amount from a base amount"
+	{
+		var foundAmount = arguments.found.substring[2];
+		var convertedAmount = convertAmountFromBase(foundAmount);
+
+		return replaceNoCase(arguments.match, foundAmount, convertedAmount);
+	}
+
+/**
+ * This library is part of the Common Function Library Project. An open source
+ * collection of UDF libraries designed for ColdFusion 5.0 and higher. For more information,
+ * please see the web site at:
+ *
+ * http://www.cflib.org
+ *
+ * Warning:
+ * You may not need all the functions in this library. If speed
+ * is _extremely_ important, you may want to consider deleting
+ * functions you do not plan on using. Normally you should not
+ * have to worry about the size of the library.
+ *
+ * License:
+ * This code may be used freely.
+ * You may modify this code as you see fit, however, this header, and the header
+ * for the functions must remain intact.
+ *
+ * This code is provided as is.  We make no warranty or guarantee.  Use of this code is at your own risk.
+ *
+ * Analogous to reReplace()/reReplaceNoCase(), except the replacement is the result of a callback, not a hard-coded string
+ * v1.0 by Adam Cameron
+ *
+ * @param string 	 The string to process (Required)
+ * @param regex 	 The regular expression to match (Required)
+ * @param callback 	 A UDF which takes arguments match (substring matched), found (a struct of keys pos,len,substring, which is subexpression breakdown of the match), offset (where in the string the match was found), string (the string the match was found within) (Required)
+ * @param scope 	 Number of replacements to make: either ONE or ALL (Optional)
+ * @param caseSensitive 	 Whether the regex is handled case-sensitively (Optional)
+ * @return A string with substitutions made
+ * @author Adam Cameron (dac.cfml@gmail.com)
+ * @version 1.0, July 18, 2013
+ */
+	private string function replaceWithCallback(required string string, required string regex, required any callback, string scope="ONE", boolean caseSensitive=true){
+		if (!isCustomFunction(callback)) { // for CF10 we could specify a type of "function", but not in CF9
+			throw(type="Application", message="Invalid callback argument value", detail="The callback argument of the replaceWithCallback() function must itself be a function reference.");
+		}
+		if (!isValid("regex", scope, "(?i)ONE|ALL")) {
+			throw(type="Application", message="The scope argument of the replaceWithCallback() function has an invalid value #scope#.", detail="Allowed values are ONE, ALL.");
+		}
+
+		var startAt	= 1;
+
+		while (true){	// there's multiple exit conditions in multiple places in the loop, so deal with exit conditions when appropriate rather than here
+			if (caseSensitive) {
+				var found = reFind(regex, string, startAt, true);
+			} else {
+				var found = reFindNoCase(regex, string, startAt, true);
+			}
+
+			if (!found.pos[1]) { // ie: it didn't find anything
+				break;
+			}
+
+			found['substring']=[];	// as well as the usual pos and len that CF gives us, we're gonna pass the actual substrings too
+
+			for (var i=1; i <= arrayLen(found.pos); i++) {
+				found.substring[i] = mid(string, found.pos[i], found.len[i]);
+			}
+
+			var match = mid(string, found.pos[1], found.len[1]);
+			var offset = found.pos[1];
+
+			var replacement = callback(match, found, offset, string);
+
+			string = removeChars(string, found.pos[1], found.len[1]);
+			string = insert(replacement, string, found.pos[1]-1);
+
+			if (scope=="ONE") {
+				break;
+			}
+
+			startAt = found.pos[1] + len(replacement);
+		}
+
+		return string;
 	}
 }
