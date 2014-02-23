@@ -88,7 +88,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 	public string function getVersion()
 		hint="I return the current version number"
 	{
-		return "0.3.1";
+		return "0.3.2";
 	}
 
 	public struct function addClient(string email="", string description="")
@@ -578,13 +578,12 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 			break;
 		}
 
-		httpService.setUsername(variables.privateKey);
-		httpService.setPassword(variables.privateKey);
 		httpService.setCharset(variables.charset);
 		httpService.setURL(endpointURL);
 		httpService.setMethod(packet.method);
 
 		httpService.addParam(name="wrapper", value="cfPaymill", type="header");
+		httpService.addParam(name="Authorization", value="Basic #toBase64(variables.privateKey)#", type="header");
 
 		response = httpService.send().getPrefix();
 
