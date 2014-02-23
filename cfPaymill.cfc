@@ -88,7 +88,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 	public string function getVersion()
 		hint="I return the current version number"
 	{
-		return "0.3.0";
+		return "0.3.1";
 	}
 
 	public struct function addClient(string email="", string description="")
@@ -349,7 +349,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		return send(packet);
 	}
 
-	public struct function updateSubscription(required string id, required boolean cancel, required string offer)
+	public struct function updateSubscription(required string id, required boolean cancel, required string payment, string offer="")
 		hint="I update a Subscription"
 	{
 		var packet = {};
@@ -361,7 +361,11 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		packet.params = [];
 
 		arrayAppend(packet.params, {name="cancel_at_period_end", value=arguments.cancel});
-		arrayAppend(packet.params, {name="offer", value=arguments.offer});
+		arrayAppend(packet.params, {name="payment", value=arguments.payment});
+
+		if (arguments.offer != "") {
+			arrayAppend(packet.params, {name="offer", value=arguments.offer});
+		}
 
 		return send(packet);
 	}
