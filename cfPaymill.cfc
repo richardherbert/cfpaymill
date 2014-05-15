@@ -88,7 +88,19 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 	public string function getVersion()
 		hint="I return the current version number"
 	{
-		return "0.3.2";
+		return "0.3.3";
+	}
+
+	public string function getPrivateKey()
+		hint="I return the Private Key"
+	{
+		return variables.privateKey;
+	}
+
+	public string function getPublicKey()
+		hint="I return the Public Key"
+	{
+		return variables.publicKey;
 	}
 
 	public struct function addClient(string email="", string description="")
