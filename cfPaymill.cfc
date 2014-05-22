@@ -717,7 +717,14 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		} else {
 			result["success"] = false;
 
-			result["error"] = deserializeJSON(fileContentJSON).error;
+			var responseData = deserializeJSON(fileContentJSON);
+			if (structKeyExists(responseData, "error")) {
+				result["error"] = responseData.error;
+			} else if (!isNull(responseData.data.response_code)) {
+				result["error"] = getResponseMessage(responseData.data.response_code);
+			} else {
+				result["error"] = "Unknown error";
+			}
 		}
 
 		result["code"] = statusCode;
