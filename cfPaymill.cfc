@@ -1,5 +1,5 @@
 /*
-Copyright 2013 Richard Herbert
+Copyright 2013-2014 Richard Herbert
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -88,7 +88,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 	public string function getVersion()
 		hint="I return the current version number"
 	{
-		return "0.3.3";
+		return "0.3.4";
 	}
 
 	public string function getPrivateKey()
@@ -633,6 +633,18 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		var statusCode = "";
 
 		fileContentJSON = arguments.response.filecontent.toString();
+
+		if (isSimpleValue(fileContentJSON) && fileContentJSON == 'Connection Failure') {
+			result["success"] = false;
+			result["data"] = {};
+			result["error"] = "Connection Failure";
+
+			result["code"] = "503";
+			result["status"] = "Connection Failure";
+
+			return result;
+		}
+
 		statusCode = arguments.response.responseHeader.status_code;
 		statusText = arguments.response.responseHeader.explanation;
 
@@ -718,6 +730,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 			result["success"] = false;
 
 			var responseData = deserializeJSON(fileContentJSON);
+
 			if (structKeyExists(responseData, "error")) {
 				result["error"] = responseData.error;
 			} else if (!isNull(responseData.data.response_code)) {
