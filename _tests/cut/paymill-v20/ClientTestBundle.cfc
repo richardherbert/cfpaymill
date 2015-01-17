@@ -89,6 +89,25 @@ component extends='cfPaymillTests.cut.paymill-v20.V20TestBundle' {
 					dateTest(customer.data.updated_at);
 				});
 			});
+
+			describe('...deleteClient()...', function() {
+				beforeEach(function(currentSpec) {
+					variables.response = application.cfPaymill.addClient(email='rosamund@pike.com', description='My name is Rosamund Pike');
+				});
+
+				afterEach(function(currentSpec) {
+					structDelete(variables, 'response');
+				});
+
+				it('...with email ("rosamund@pike.com") and description ("My name is Rosamund Pike").', function() {
+					var customer = application.cfPaymill.deleteClient(variables.response.data.id);
+
+					statusTest(customer);
+					clientTest(customer.data, '^client_*', 'rosamund@pike.com', 'My name is Rosamund Pike');
+					dateTest(customer.data.created_at);
+					dateTest(customer.data.updated_at);
+				});
+			});
 		});
 	}
 }
