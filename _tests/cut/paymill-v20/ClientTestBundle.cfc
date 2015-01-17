@@ -108,6 +108,45 @@ component extends='cfPaymillTests.cut.paymill-v20.V20TestBundle' {
 					dateTest(customer.data.updated_at);
 				});
 			});
+
+			describe('...updateClient()...', function() {
+				beforeEach(function(currentSpec) {
+					variables.response = application.cfPaymill.addClient();
+				});
+
+				afterEach(function(currentSpec) {
+					var response = application.cfPaymill.deleteClient(variables.response.data.id);
+
+					structDelete(variables, 'response');
+				});
+
+				it('...update email only to "benedict@cumberbatch.com"', function() {
+					variables.response = application.cfPaymill.updateClient(variables.response.data.id, 'benedict@cumberbatch.com');
+
+					statusTest(variables.response);
+					clientTest(variables.response.data, '^client_*', 'benedict@cumberbatch.com', '');
+					dateTest(variables.response.data.created_at);
+					dateTest(variables.response.data.updated_at);
+				});
+
+				it('...update description only to "My name is Benedict Cumberbatch"', function() {
+					variables.response = application.cfPaymill.updateClient(id=variables.response.data.id, description='My name is Benedict Cumberbatch');
+
+					statusTest(variables.response);
+					clientTest(variables.response.data, '^client_*', '', 'My name is Benedict Cumberbatch');
+					dateTest(variables.response.data.created_at);
+					dateTest(variables.response.data.updated_at);
+				});
+
+				it('...update email to "ralph@fiennes.com" and description to "My name is Ralph Fiennes"', function() {
+					variables.response = application.cfPaymill.updateClient(variables.response.data.id, 'ralph@fiennes.com', 'My name is Ralph Fiennes');
+
+					statusTest(variables.response);
+					clientTest(variables.response.data, '^client_*', 'ralph@fiennes.com', 'My name is Ralph Fiennes');
+					dateTest(variables.response.data.created_at);
+					dateTest(variables.response.data.updated_at);
+				});
+			});
 		});
 	}
 }
