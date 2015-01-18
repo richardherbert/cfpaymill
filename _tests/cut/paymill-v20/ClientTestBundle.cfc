@@ -15,12 +15,18 @@ component extends='cfPaymillTests.cut.paymill-v20.V20TestBundle' {
 				structDelete(variables, 'response');
 			});
 
-			it('...getClients() returns an array of clients.', function() {
-				variables.response = application.cfPaymill.getClients();
+			describe('...getClients()...', function() {
+				beforeEach(function(currentSpec) {});
 
-				statusTest(variables.response);
+				afterEach(function(currentSpec) {});
 
-				expect(variables.response.data).toBeArray();
+				it('...returns an array of clients.', function() {
+					variables.response = application.cfPaymill.getClients();
+
+					statusTest(variables.response);
+
+					expect(variables.response.data).toBeArray();
+				});
 			});
 
 			describe('...addClient()...', function() {
