@@ -519,7 +519,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 
 		for (param in arguments.params) {
 			if (params[param] != "" && params[param] != 0) {
-				arrayAppend(packet.params, {name=param, value=params[param]});
+				arrayAppend(packet.params, {name=lCase(param), value=params[param]});
 			}
 		}
 
