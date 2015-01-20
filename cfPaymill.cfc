@@ -15,12 +15,11 @@ limitations under the License.
 */
 
 component output="false" displayname="cfPaymill" hint="I am a ColdFusion component that provides an interface to the Paymill API" {
-	public cfPaymill function init(required string privateKey, string publicKey="", string apiEndpoint="https://api.paymill.com/v2/", string logfile="")
+	public cfPaymill function init(required string privateKey, string publicKey="", string logfile="")
 		hint="I am the intitialise method that is fired upon instantiation"
 	{
 		variables.privateKey = arguments.privateKey;
 		variables.publicKey = arguments.publicKey;
-		variables.apiEndpoint = arguments.apiEndpoint;
 
 		variables.logfile = arguments.logfile;
 
@@ -553,7 +552,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		param name="packet.method" default="GET";
 		param name="packet.params" default=[];
 
-		var endpointURL = variables.apiEndpoint & packet.object & "/";
+		var endpointURL = "https://api.paymill.com/v2.1/" & packet.object & "/";
 
 		switch(packet.method){
 			case "POST":
