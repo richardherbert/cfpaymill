@@ -536,7 +536,14 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		packet.method = "DELETE";
 		packet.id = arguments.id;
 
-		return send(packet);
+		var sendResponse = send(packet);
+
+// convert NULL data to an empty array if a client is being deleted (Paymill, WTF, sigh!)
+			if (arguments.object == 'clients') {
+				sendResponse.filecontent = reReplaceNoCase(sendResponse.filecontent, '"data":null', '"data":[]', "all");
+			}
+
+		return processResponse(sendResponse);
 	}
 
 	private struct function send(required struct inboundPacket)
