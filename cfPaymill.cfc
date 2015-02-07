@@ -23,6 +23,8 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 
 		variables.logfile = arguments.logfile;
 
+		variables.endpointURL = 'https://api.paymill.com/v2.1/';
+
 		variables.charset = "utf-8";
 
 		variables.epochDatesToConvert = [];
@@ -552,7 +554,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		param name="packet.method" default="GET";
 		param name="packet.params" default=[];
 
-		var endpointURL = "https://api.paymill.com/v2.1/" & packet.object & "/";
+		var endpointURL = variables.endpointURL & packet.object & "/";
 
 		switch(packet.method){
 			case "POST":
