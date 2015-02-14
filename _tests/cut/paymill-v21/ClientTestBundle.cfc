@@ -109,9 +109,6 @@ component extends='cfPaymillTests.cut.paymill-v21.V21TestBundle' {
 					var customer = application.cfPaymill.deleteClient(variables.response.data.id);
 
 					statusTest(customer);
-					clientTest(customer.data, '^client_*', 'rosamund@pike.com', 'My name is Rosamund Pike');
-					dateTest(customer.data.created_at);
-					dateTest(customer.data.updated_at);
 				});
 			});
 
