@@ -88,7 +88,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 	public string function getVersion()
 		hint="I return the current version number"
 	{
-		return "0.3.4";
+		return "0.3.5";
 	}
 
 	public string function getPrivateKey()
