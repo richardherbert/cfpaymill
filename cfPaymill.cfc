@@ -88,7 +88,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 	public string function getVersion()
 		hint="I return the current version number"
 	{
-		return "0.3.4";
+		return "0.3.5";
 	}
 
 	public string function getPrivateKey()
@@ -391,7 +391,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 	public struct function getSubscriptions(numeric count=20, numeric offset=0)
 		hint="I return a list of Subscriptions"
 	{
-		return getObjects(object="refunds", params=arguments);
+		return getObjects(object="subscriptions", params=arguments);
 	}
 
 	public struct function deleteSubscription(required string id)
