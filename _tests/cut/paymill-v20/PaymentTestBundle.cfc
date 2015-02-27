@@ -33,7 +33,7 @@ component extends='cfPaymillTests.cut.paymill-v20.V20TestBundle' {
 
 				afterEach(function(currentSpec) {});
 
-				it('...returns an array of offers.', function() {
+				it('...returns an array of payments.', function() {
 					variables.response = application.cfPaymill.getPayments();
 
 					statusTest(variables.response);
