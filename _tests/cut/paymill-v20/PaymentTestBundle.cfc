@@ -51,7 +51,6 @@ component extends='cfPaymillTests.cut.paymill-v20.V20TestBundle' {
 					variables.response = application.cfPaymill.addPayment(token=variables.token);
 
 					variables.paymentID = variables.response.data.id;
-debug(variables.response);
 
 					statusTest(variables.response);
 					paymentTest(variables.response.data, '^pay_*'
