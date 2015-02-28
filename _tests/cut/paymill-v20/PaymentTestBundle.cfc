@@ -10,16 +10,24 @@ component extends='cfPaymillTests.cut.paymill-v20.V20TestBundle' {
 	function run() {
 		var options = deserializeJSON(options);
 
-		variables.token = options.token;
+		param variables.name=options.name;
+		param variables.emailAddress=options.emailAddress;
 
-		variables.amount = 12.99;
-		variables.currency = 'GBP';
+		param variables.cardNumber=options.cardNumber;
+		param variables.cvc=options.cvc;
+
+		param variables.expiryMonth=options.expiryMonth;
+		param variables.expiryYear=options.expiryYear;
+
+		param variables.amount=options.amount;
+		param variables.currency=options.currency;
+
+		param variables.token=options.token;
+
 		variables.type = 'creditcard';
 		variables.card_type = 'visa';
 		variables.country = 'DE';
-		variables.last4 = '1111';
-		variables.expiryMonth = month(now());
-		variables.expiryYear = year(now()) + 1;
+		variables.last4 = right(variables.cardNumber, 4);
 
 		describe('Payment...', function() {
 			beforeEach(function(currentSpec) {});
@@ -28,40 +36,26 @@ component extends='cfPaymillTests.cut.paymill-v20.V20TestBundle' {
 				structDelete(variables, 'response');
 			});
 
-			describe('...getPayments()...', function() {
-				beforeEach(function(currentSpec) {});
-
-				afterEach(function(currentSpec) {});
-
-				it('...returns an array of payments.', function() {
-					variables.response = application.cfPaymill.getPayments();
-
-					statusTest(variables.response);
-
-					expect(variables.response.data).toBeArray();
-				});
-			});
-
 			describe('...addPayment()...', function() {
 				beforeEach(function(currentSpec) {});
 
 				afterEach(function(currentSpec) {});
 
 				it('...with token (#variables.token#).', function() {
-					variables.response = application.cfPaymill.addPayment(token=variables.token);
+					var payment = application.cfPaymill.addPayment(token=variables.token);
 
-					variables.paymentID = variables.response.data.id;
+					variables.paymentID = payment.data.id;
 
-					statusTest(variables.response);
-					paymentTest(variables.response.data, '^pay_*'
+					statusTest(payment);
+					paymentTest(payment.data, '^pay_*'
 						,variables.type
 						,variables.card_type
 						,variables.country
 						,variables.last4
 						,variables.expiryMonth
 						,variables.expiryYear);
-					dateTest(variables.response.data.created_at);
-					dateTest(variables.response.data.updated_at);
+					dateTest(payment.data.created_at);
+					dateTest(payment.data.updated_at);
 				});
 			});
 
@@ -83,6 +77,20 @@ component extends='cfPaymillTests.cut.paymill-v20.V20TestBundle' {
 						,variables.expiryYear);
 					dateTest(payment.data.created_at);
 					dateTest(payment.data.updated_at);
+				});
+			});
+
+			describe('...getPayments()...', function() {
+				beforeEach(function(currentSpec) {});
+
+				afterEach(function(currentSpec) {});
+
+				it('...returns an array of payments.', function() {
+					var payment = application.cfPaymill.getPayments();
+
+					statusTest(payment);
+
+					expect(payment.data).toBeArray();
 				});
 			});
 
