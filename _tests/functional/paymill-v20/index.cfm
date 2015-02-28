@@ -4,42 +4,60 @@
 
 	<body>
 		<cfoutput>
+			<p>NOTE: Allow popups in browser</p>
+
 			<h1>Functional Tests - Paymill v2.0</h1>
 
-			<h2>Payment</h2>
-
-			<cfset suffix = timeFormat(now(), 'HHmmss')>
-
 			<cfset data = {}>
-			<!--- <cfset data.name = 'client-#suffix#'> --->
-			<!--- <cfset data.emailAddress = '#data.name#@example.com'> --->
+
+			<cfset data.name = 'client-#timeFormat(now(), 'HHmmss')#'>
+			<cfset data.emailAddress = '#data.name#@example.com'>
+
 			<cfset data.cardNumber = '4111111111111111'>
 			<cfset data.cvc = '111'>
+
 			<cfset data.expiryMonth = month(now())>
 			<cfset data.expiryYear = year(now()) + 1>
-			<!--- <cfset data.currency = 'GBP'> --->
-			<!--- <cfset data.amount = 12.99> --->
 
-			<!--- <div>Name: #data.name#</div> --->
-			<!--- <div>Email address: #data.emailAddress#</div> --->
-			<div>Card number: #data.cardNumber#</div>
-			<div>CVC: #data.cvc#</div>
-			<div>Expiry month: #data.expiryMonth#</div>
-			<div>Expiry year: #data.expiryYear#</div>
-			<!--- <div>Currency: #data.currency#</div> --->
-			<!--- <div>Amount: #data.amount#</div> --->
+			<cfset data.amount = 12.99>
+			<cfset data.currency = 'GBP'>
 
-			<form id="payment-form">
-				<!--- <input id="card-holdername" type="hidden" value="#data.name#"> --->
-				<!--- <input id="email" type="hidden" value="#data.emailAddress#"> --->
-				<input id="card-number" type="hidden" value="#data.cardNumber#">
+			<form id="testingForm" method="POST" target="_blank">
+				<h2>Payment</h2>
+
+				<div>Card number: #data.cardNumber#</div>
+				<div>CVC: #data.cvc#</div>
+				<div>Expiry month: #data.expiryMonth#</div>
+				<div>Expiry year: #data.expiryYear#</div>
+
+				<button id="submitPayment" class="submitForm" type="button">Submit</button>
+
+				<h2>Transaction</h2>
+
+				<div>Name: #data.name#</div>
+				<div>Email address: #data.emailAddress#</div>
+				<div>Card number: #data.cardNumber#</div>
+				<div>CVC: #data.cvc#</div>
+				<div>Expiry month: #data.expiryMonth#</div>
+				<div>Expiry year: #data.expiryYear#</div>
+				<div>Currency: #data.currency#</div>
+				<div>Amount: #data.amount#</div>
+
+				<button id="submitTransaction" class="submitForm" type="button">Submit</button>
+
+<!--- ------------------------------------------------- --->
+
+				<input id="card-holdername" type="hidden" value="#data.name#">
+				<input id="email" type="hidden" value="#data.emailAddress#">
+
+				<input id="card-number" name="abc" type="hidden" value="#data.cardNumber#">
 				<input id="card-cvc" type="hidden" value="#data.cvc#">
+
 				<input id="card-expiry-month" type="hidden" value="#data.expiryMonth#">
 				<input id="card-expiry-year" type="hidden" value="#data.expiryYear#">
-				<!--- <input id="card-currency" type="hidden" value="#data.currency#"> --->
-				<!--- <input id="card-amount-int" type="hidden" value="#data.amount * 100#"> --->
 
-				<button id="submitButton" type="button">Submit</button>
+				<input id="card-currency" type="hidden" value="#data.currency#">
+				<input id="card-amount-int" type="hidden" value="#data.amount * 100#">
 			</form>
 		</cfoutput>
 
@@ -53,28 +71,67 @@
 		<script type="text/javascript" src="https://bridge.paymill.com/"></script>
 
 		<script type="text/javascript">
-			$(document).ready(function() {
-				$("#submitButton").on("click", function(event) {
-					paymill.createToken({cardholder: $('#card-holdername').val()
-						,number: $('#card-number').val()
-						,cvc: $('#card-cvc').val()
-						,exp_month: $('#card-expiry-month').val()
-						,exp_year: $('#card-expiry-year').val()
-						,currency: $('#card-currency').val()
-						,amount_int: $('#card-amount-int').val()
-					}, PaymillResponseHandler);
+			$(document).ready(function(event) {
+				$(".submitForm").on("click", function(event) {
+					var submitButton = $(this);
+
+					switch($(submitButton).attr('id')) {
+						case 'submitPayment':
+							component = 'PaymentTestBundle.cfc';
+
+							paymill.createToken({number: $('#card-number').val()
+								,cvc: $('#card-cvc').val()
+								,exp_month: $('#card-expiry-month').val()
+								,exp_year: $('#card-expiry-year').val()
+							}, getPaymillToken);
+						break;
+
+						case 'submitTransaction':
+							component = 'TransactionTestBundle.cfc';
+
+							paymill.createToken({cardholder: $('#card-holdername').val()
+								,number: $('#card-number').val()
+								,cvc: $('#card-cvc').val()
+								,exp_month: $('#card-expiry-month').val()
+								,exp_year: $('#card-expiry-year').val()
+								,currency: $('#card-currency').val()
+								,amount_int: $('#card-amount-int').val()
+							}, getPaymillToken);
+						break;
+
+						default:
+					}
 				})
 
-				function PaymillResponseHandler(error, result) {
+				function getPaymillToken(error, result) {
 					console.log(result);
 
+					<cfoutput>
+						var options = {
+							 name:'#data.name#'
+							,emailaddress:'#data.emailAddress#'
+
+							,cardnumber:'#data.cardNumber#'
+							,cvc:'#data.cvc#'
+
+							,expirymonth:'#data.expiryMonth#'
+							,expiryyear:'#data.expiryYear#'
+
+							,currency:'#data.currency#'
+							,amount:'#data.amount#'
+						};
+					</cfoutput>
+
 					if (error) {
-		// Displays the error above the form
 						$(".payment-errors").text(error.apierror);
 					} else {
-						var options = 'options={"token":"' + result.token + '"}';
+						options.token = result.token;
 
-						window.open('/cfPaymill/_tests/cut/paymill-v20/PaymentTestBundle.cfc?method=runRemote&options=' + options, '_blank');
+						var actionURL = '/cfPaymill/_tests/cut/paymill-v20/' + component + '?method=runRemote&options=' + JSON.stringify(options);
+
+						$("#testingForm").attr('action', actionURL);
+
+						$("#testingForm").submit();
 					}
 				};
 			});
