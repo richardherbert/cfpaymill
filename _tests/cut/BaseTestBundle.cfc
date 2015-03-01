@@ -9,6 +9,29 @@ component extends='testbox.system.BaseSpec' {
 	function afterAll() {
 	}
 
+	function run() {
+		var options = deserializeJSON(url.options);
+
+		variables.name = options.name;
+		variables.emailAddress = options.emailAddress;
+
+		variables.type = options.type;
+		variables.cardNumber = options.cardNumber;
+		variables.cvc = options.cvc;
+
+		variables.expiryMonth = options.expiryMonth;
+		variables.expiryYear = options.expiryYear;
+
+		variables.amount = options.amount;
+		variables.currency = options.currency;
+
+		variables.card_type = options.brand;
+		variables.last4 = options.last4;
+		variables.country = options.binCountry;
+
+		variables.token = options.token;
+	}
+
 	private void function clientTest(required struct data, required string id, required string email, required string description) {
 		expect(arguments.data).toBeStruct();
 

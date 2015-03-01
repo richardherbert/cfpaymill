@@ -8,26 +8,7 @@ component extends='cfPaymillTests.cut.paymill-v20.V20TestBundle' {
 	}
 
 	function run() {
-		var options = deserializeJSON(options);
-
-		param variables.name=options.name;
-		param variables.emailAddress=options.emailAddress;
-
-		param variables.cardNumber=options.cardNumber;
-		param variables.cvc=options.cvc;
-
-		param variables.expiryMonth=options.expiryMonth;
-		param variables.expiryYear=options.expiryYear;
-
-		param variables.amount=options.amount;
-		param variables.currency=options.currency;
-
-		param variables.token=options.token;
-
-		variables.type = 'creditcard';
-		variables.card_type = 'visa';
-		variables.country = 'DE';
-		variables.last4 = right(variables.cardNumber, 4);
+		super.run();
 
 		describe('Payment...', function() {
 			beforeEach(function(currentSpec) {});
