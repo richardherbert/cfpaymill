@@ -45,6 +45,8 @@
 				<div>Amount: #data.amount#</div>
 
 				<button class="submitForm" data-component="TransactionTestBundle.cfc" type="button">Minimal Transaction Test</button>
+				<br>
+				<button class="submitForm" data-component="TransactionPaymentClientTestBundle.cfc" type="button">Transaction Test with Payment and Client</button>
 
 <!--- ------------------------------------------------- --->
 
