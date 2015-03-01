@@ -26,6 +26,8 @@ component extends='cfPaymillTests.cut.paymill-v20.V20TestBundle' {
 						,token=variables.token
 					);
 
+					debug(transaction);
+
 					variables.transactionID = transaction.data.id;
 
 					statusTest(transaction);
