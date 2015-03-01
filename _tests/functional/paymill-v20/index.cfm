@@ -85,25 +85,29 @@
 				function getPaymillToken(error, result) {
 					console.log(result);
 
-					<cfoutput>
-						var options = {
-							 name:'#data.name#'
-							,emailaddress:'#data.emailAddress#'
-
-							,cardnumber:'#data.cardNumber#'
-							,cvc:'#data.cvc#'
-
-							,expirymonth:'#data.expiryMonth#'
-							,expiryyear:'#data.expiryYear#'
-
-							,currency:'#data.currency#'
-							,amount:'#data.amount#'
-						};
-					</cfoutput>
-
 					if (error) {
 						$(".payment-errors").text(error.apierror);
 					} else {
+						<cfoutput>
+							var options = {
+								 name:'#data.name#'
+								,emailaddress:'#data.emailAddress#'
+
+								,type:'#data.type#'
+								,cardnumber:'#data.cardNumber#'
+								,cvc:'#data.cvc#'
+
+								,expirymonth:'#data.expiryMonth#'
+								,expiryyear:'#data.expiryYear#'
+
+								,currency:'#data.currency#'
+								,amount:'#data.amount#'
+							};
+						</cfoutput>
+
+						options.brand = result.brand;
+						options.last4 = result.last4Digits;
+						options.binCountry = result.binCountry;
 						options.token = result.token;
 
 						var actionURL = '/cfPaymill/_tests/cut/paymill-v20/' + component + '?method=runRemote&options=' + JSON.stringify(options);
