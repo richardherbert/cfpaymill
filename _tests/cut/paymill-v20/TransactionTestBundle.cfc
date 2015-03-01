@@ -13,9 +13,7 @@ component extends='cfPaymillTests.cut.paymill-v20.V20TestBundle' {
 		describe('Transaction...', function() {
 			beforeEach(function(currentSpec) {});
 
-			afterEach(function(currentSpec) {
-				structDelete(variables, 'response');
-			});
+			afterEach(function(currentSpec) {});
 
 			describe('...addTransaction()...', function() {
 				beforeEach(function(currentSpec) {});
