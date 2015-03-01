@@ -31,7 +31,7 @@
 				<div>Expiry month: #data.expiryMonth#</div>
 				<div>Expiry year: #data.expiryYear#</div>
 
-				<button class="submitForm" data-component="PaymentTestBundle.cfc" type="button">Submit</button>
+				<button class="submitForm" data-component="PaymentTestBundle.cfc" type="button">Minimal Payment Test</button>
 
 				<h2>Transaction</h2>
 
@@ -44,7 +44,7 @@
 				<div>Currency: #data.currency#</div>
 				<div>Amount: #data.amount#</div>
 
-				<button class="submitForm" data-component="TransactionTestBundle.cfc" type="button">Submit</button>
+				<button class="submitForm" data-component="TransactionTestBundle.cfc" type="button">Minimal Transaction Test</button>
 
 <!--- ------------------------------------------------- --->
 
