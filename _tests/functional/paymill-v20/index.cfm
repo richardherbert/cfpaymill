@@ -24,6 +24,9 @@
 			<cfset data.currency = 'GBP'>
 
 			<form id="testingForm" method="POST" target="_blank">
+				<button id="get-paymill-token" type="button">Get a Paymill Token</button>
+				<span id="paymill-token"></span>
+
 				<h2>Payment</h2>
 
 				<div>Card number: #data.cardNumber#</div>
@@ -75,8 +78,8 @@
 
 		<script type="text/javascript">
 			$(document).ready(function(event) {
-				$(".submitForm").on("click", function(event) {
-					component = $(this).data('component');
+				$("#get-paymill-token").on("click", function(event) {
+					// component = $(this).data('component');
 
 					paymill.createToken({number: $('#card-number').val()
 						,cvc: $('#card-cvc').val()
@@ -85,7 +88,19 @@
 					}, getPaymillToken);
 				})
 
-				function getPaymillToken(error, result) {
+
+
+				$(".submitForm").on("click", function(event) {
+					component = $(this).data('component');
+
+					paymill.createToken({number: $('#card-number').val()
+						,cvc: $('#card-cvc').val()
+						,exp_month: $('#card-expiry-month').val()
+						,exp_year: $('#card-expiry-year').val()
+					}, runTestSuite);
+				})
+
+				function runTestSuite(error, result) {
 					console.log(result);
 
 					if (error) {
@@ -119,6 +134,10 @@
 
 						$("#testingForm").submit();
 					}
+				};
+
+				function getPaymillToken(error, result) {
+					$('#paymill-token').text(result.token);
 				};
 			});
 		</script>
