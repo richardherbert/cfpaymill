@@ -30,7 +30,7 @@
 				<div>Expiry month: #data.expiryMonth#</div>
 				<div>Expiry year: #data.expiryYear#</div>
 
-				<button id="submitPayment" class="submitForm" type="button">Submit</button>
+				<button class="submitForm" data-component="PaymentTestBundle.cfc" type="button">Submit</button>
 
 				<h2>Transaction</h2>
 
@@ -43,7 +43,7 @@
 				<div>Currency: #data.currency#</div>
 				<div>Amount: #data.amount#</div>
 
-				<button id="submitTransaction" class="submitForm" type="button">Submit</button>
+				<button class="submitForm" data-component="TransactionTestBundle.cfc" type="button">Submit</button>
 
 <!--- ------------------------------------------------- --->
 
@@ -73,31 +73,13 @@
 		<script type="text/javascript">
 			$(document).ready(function(event) {
 				$(".submitForm").on("click", function(event) {
-					var submitButton = $(this);
+					component = $(this).data('component');
 
-					switch($(submitButton).attr('id')) {
-						case 'submitPayment':
-							component = 'PaymentTestBundle.cfc';
-
-							paymill.createToken({number: $('#card-number').val()
-								,cvc: $('#card-cvc').val()
-								,exp_month: $('#card-expiry-month').val()
-								,exp_year: $('#card-expiry-year').val()
-							}, getPaymillToken);
-						break;
-
-						case 'submitTransaction':
-							component = 'TransactionTestBundle.cfc';
-
-							paymill.createToken({number: $('#card-number').val()
-								,cvc: $('#card-cvc').val()
-								,exp_month: $('#card-expiry-month').val()
-								,exp_year: $('#card-expiry-year').val()
-							}, getPaymillToken);
-						break;
-
-						default:
-					}
+					paymill.createToken({number: $('#card-number').val()
+						,cvc: $('#card-cvc').val()
+						,exp_month: $('#card-expiry-month').val()
+						,exp_year: $('#card-expiry-year').val()
+					}, getPaymillToken);
 				})
 
 				function getPaymillToken(error, result) {
