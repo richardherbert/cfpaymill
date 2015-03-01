@@ -89,13 +89,10 @@
 						case 'submitTransaction':
 							component = 'TransactionTestBundle.cfc';
 
-							paymill.createToken({cardholder: $('#card-holdername').val()
-								,number: $('#card-number').val()
+							paymill.createToken({number: $('#card-number').val()
 								,cvc: $('#card-cvc').val()
 								,exp_month: $('#card-expiry-month').val()
 								,exp_year: $('#card-expiry-year').val()
-								,currency: $('#card-currency').val()
-								,amount_int: $('#card-amount-int').val()
 							}, getPaymillToken);
 						break;
 
