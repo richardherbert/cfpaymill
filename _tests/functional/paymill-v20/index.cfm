@@ -15,6 +15,7 @@
 
 			<cfset data.cardNumber = '4111111111111111'>
 			<cfset data.cvc = '111'>
+			<cfset data.type = 'creditcard'>
 
 			<cfset data.expiryMonth = month(now())>
 			<cfset data.expiryYear = year(now()) + 1>
