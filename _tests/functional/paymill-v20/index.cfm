@@ -56,6 +56,8 @@
 				<button class="submitForm" data-component="TransactionTestBundle.cfc" type="button">Minimal Transaction Test</button>
 				<br>
 				<button class="submitForm" data-component="TransactionPaymentClientTestBundle.cfc" type="button">Transaction Test with Payment and Client</button>
+				<br>
+				<button class="submitForm" data-component="TransactionPreauthorizationTestBundle.cfc" type="button">Transaction Test with Preauthorization</button>
 
 <!--- ------------------------------------------------- --->
 
