@@ -67,6 +67,14 @@ component extends='testbox.system.BaseSpec' {
 		expect(arguments.data.expire_year).toBe(arguments.expire_year, 'Expiry Year expected to be "#arguments.expire_year#" but returned "#arguments.data.expire_year#"');
 	}
 
+	private void function preauthorizationTest(required struct data, required string id, required string amount, required string currency) {
+		expect(arguments.data).toBeStruct();
+
+		expect(arguments.data.id).toMatch(arguments.id, 'ID expected to be like "#arguments.id#" but returned "#arguments.data.id#"');
+		expect(arguments.data.amount).toBe(arguments.amount, 'Amount expected to be "#arguments.amount#" but returned "#arguments.data.amount#"');
+		expect(arguments.data.currency).toBe(arguments.currency, 'Currency expected to be "#arguments.currency#" but returned "#arguments.data.currency#"');
+	}
+
 	private void function transactionTest(required struct data, required string id, required string amount, required string currency) {
 		expect(arguments.data).toBeStruct();
 

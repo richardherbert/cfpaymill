@@ -1,5 +1,8 @@
-<html>
+<!DOCTYPE html>
+<html lang="en-gb">
 	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
 	</head>
 
 	<body>
@@ -36,6 +39,9 @@
 
 				<button class="submitForm" data-component="PaymentTestBundle.cfc" type="button">Minimal Payment Test</button>
 
+				<h2>Preauthorization</h2>
+				<button class="submitForm" data-component="PreauthorizationTestBundle.cfc" type="button">Minimal Preauthorization Test</button>
+
 				<h2>Transaction</h2>
 
 				<div>Name: #data.name#</div>
@@ -70,13 +76,13 @@
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 		<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
 
-		<script type="text/javascript">
+		<script>
 			var PAYMILL_PUBLIC_KEY = '39807165956a5f3404fa8225d24b887a';
 		</script>
 
 		<script type="text/javascript" src="https://bridge.paymill.com/"></script>
 
-		<script type="text/javascript">
+		<script>
 			$(document).ready(function(event) {
 				$("#get-paymill-token").on("click", function(event) {
 					// component = $(this).data('component');
