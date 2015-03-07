@@ -1,5 +1,5 @@
 /*
-Copyright 2013-2015 Richard Herbert
+Copyright 2013-2014 Richard Herbert
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,15 +15,14 @@ limitations under the License.
 */
 
 component output="false" displayname="cfPaymill" hint="I am a ColdFusion component that provides an interface to the Paymill API" {
-	public cfPaymill function init(required string privateKey, string publicKey="", string logfile="")
+	public cfPaymill function init(required string privateKey, string publicKey="", string apiEndpoint="https://api.paymill.com/v2/", string logfile="")
 		hint="I am the intitialise method that is fired upon instantiation"
 	{
 		variables.privateKey = arguments.privateKey;
 		variables.publicKey = arguments.publicKey;
+		variables.apiEndpoint = arguments.apiEndpoint;
 
 		variables.logfile = arguments.logfile;
-
-		variables.endpointURL = 'https://api.paymill.com/v2.1/';
 
 		variables.charset = "utf-8";
 
@@ -89,7 +88,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 	public string function getVersion()
 		hint="I return the current version number"
 	{
-		return "0.3.4";
+		return "0.3.6";
 	}
 
 	public string function getPrivateKey()
@@ -117,9 +116,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		arrayAppend(packet.params, {name="email", value=arguments.email});
 		arrayAppend(packet.params, {name="description", value=arguments.description});
 
-		var sendResponse = send(packet);
-
-		return processResponse(sendResponse);
+		return send(packet);
 	}
 
 	public struct function updateClient(required string id, string email="", string description="")
@@ -136,9 +133,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		arrayAppend(packet.params, {name="email", value=arguments.email});
 		arrayAppend(packet.params, {name="description", value=arguments.description});
 
-		var sendResponse = send(packet);
-
-		return processResponse(sendResponse);
+		return send(packet);
 	}
 
 	public struct function getClient(required string id)
@@ -174,9 +169,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		arrayAppend(packet.params, {name="interval", value=arguments.interval});
 		arrayAppend(packet.params, {name="name", value=arguments.name});
 
-		var sendResponse = send(packet);
-
-		return processResponse(sendResponse);
+		return send(packet);
 	}
 
 	public struct function getOffer(required string id)
@@ -204,9 +197,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 
 		arrayAppend(packet.params, {name="name", value=arguments.name});
 
-		var sendResponse = send(packet);
-
-		return processResponse(sendResponse);
+		return send(packet);
 	}
 
 	public struct function deleteOffer(required string id)
@@ -228,9 +219,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		arrayAppend(packet.params, {name="token", value=arguments.token});
 		arrayAppend(packet.params, {name="client", value=arguments.client});
 
-		var sendResponse = send(packet);
-
-		return processResponse(sendResponse);
+		return send(packet);
 	}
 
 	public struct function getPayment(required string id)
@@ -298,9 +287,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 			return result;
 		}
 
-		var sendResponse = send(packet);
-
-		return  processResponse(sendResponse);
+		return send(packet);
 	}
 
 	public struct function getPreauthorization(required string id)
@@ -335,9 +322,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		arrayAppend(packet.params, {name="amount", value=convertAmountToBase(arguments.amount)});
 		arrayAppend(packet.params, {name="description", value=arguments.description});
 
-		var sendResponse = send(packet);
-
-		return processResponse(sendResponse);
+		return send(packet);
 	}
 
 	public struct function getRefund(required string id)
@@ -373,9 +358,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 			arrayAppend(packet.params, {name="start_at", value=getEpochTimeFromLocal(arguments.startDate)});
 		}
 
-		var sendResponse = send(packet);
-
-		return processResponse(sendResponse);
+		return send(packet);
 	}
 
 	public struct function updateSubscription(required string id, required boolean cancel, required string payment, string offer="")
@@ -396,9 +379,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 			arrayAppend(packet.params, {name="offer", value=arguments.offer});
 		}
 
-		var sendResponse = send(packet);
-
-		return processResponse(sendResponse);
+		return send(packet);
 	}
 
 	public struct function getSubscription(required string id)
@@ -410,7 +391,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 	public struct function getSubscriptions(numeric count=20, numeric offset=0)
 		hint="I return a list of Subscriptions"
 	{
-		return getObjects(object="refunds", params=arguments);
+		return getObjects(object="subscriptions", params=arguments);
 	}
 
 	public struct function deleteSubscription(required string id)
@@ -459,9 +440,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 
 		arrayAppend(packet.params, {name="description", value=arguments.description});
 
-		var sendResponse = send(packet);
-
-		return processResponse(sendResponse);
+		return send(packet);
 	}
 
 	public struct function getTransaction(required string id)
@@ -525,9 +504,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		packet.method = "GET";
 		packet.id = arguments.id;
 
-		var sendResponse = send(packet);
-
-		return processResponse(sendResponse);
+		return send(packet);
 	}
 
 	private struct function getObjects(required string object, struct params={})
@@ -546,9 +523,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 			}
 		}
 
-		var sendResponse = send(packet);
-
-		return processResponse(sendResponse);
+		return send(packet);
 	}
 
 	private struct function deleteObject(required string object, required string id)
@@ -560,14 +535,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		packet.method = "DELETE";
 		packet.id = arguments.id;
 
-		var sendResponse = send(packet);
-
-// convert NULL data to an empty array if a client is being deleted (Paymill, WTF, sigh!)
-			if (arguments.object == 'clients') {
-				sendResponse.filecontent = reReplaceNoCase(sendResponse.filecontent, '"data":null', '"data":[]', "all");
-			}
-
-		return processResponse(sendResponse);
+		return send(packet);
 	}
 
 	private struct function send(required struct inboundPacket)
@@ -585,7 +553,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		param name="packet.method" default="GET";
 		param name="packet.params" default=[];
 
-		var endpointURL = variables.endpointURL & packet.object & "/";
+		var endpointURL = variables.apiEndpoint & packet.object & "/";
 
 		switch(packet.method){
 			case "POST":
@@ -648,7 +616,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 			}
 		}
 
-		return response;
+		return processResponse(response);
 	}
 
 	private struct function processResponse(required struct response)
@@ -740,6 +708,14 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 					newValue = getDate(updatedDate.value);
 
 					structUpdate(updatedDate.owner, "updated_at", newValue);
+				}
+
+				captureDates = structFindKey(result.data, "next_capture_at", "all");
+
+				for (captureDate in captureDates) {
+					newValue = getDate(captureDate.value);
+
+					structUpdate(captureDate.owner, "next_capture_at", newValue);
 				}
 
 				amounts = structFindKey(result.data, "amount", "all");
