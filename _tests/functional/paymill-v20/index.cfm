@@ -3,6 +3,8 @@
 	<head>
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+		<title>cfPaymill Functional Testing - Paymill API v2.0</title>
 	</head>
 
 	<body>
@@ -59,6 +61,15 @@
 				<br>
 				<button class="submitForm" data-component="TransactionPreauthorizationTestBundle.cfc" type="button">Transaction Test with Preauthorization</button>
 
+				<h2>Subscription</h2>
+				<button class="submitForm" data-component="SubscriptionTestBundle.cfc" type="button">Minimal Subscription Test</button>
+<!---
+				<br>
+				<button class="submitForm" data-component="SubscriptionClientTestBundle.cfc" type="button">Subscription Test with new Client</button>
+--->
+				<br>
+				<button class="submitForm" data-component="SubscriptionStartTestBundle.cfc" type="button">Subscription Test with delayed Start Date</button>
+
 <!--- ------------------------------------------------- --->
 
 				<input id="card-holdername" type="hidden" value="#data.name#">
@@ -87,16 +98,12 @@
 		<script>
 			$(document).ready(function(event) {
 				$("#get-paymill-token").on("click", function(event) {
-					// component = $(this).data('component');
-
 					paymill.createToken({number: $('#card-number').val()
 						,cvc: $('#card-cvc').val()
 						,exp_month: $('#card-expiry-month').val()
 						,exp_year: $('#card-expiry-year').val()
 					}, getPaymillToken);
 				})
-
-
 
 				$(".submitForm").on("click", function(event) {
 					component = $(this).data('component');

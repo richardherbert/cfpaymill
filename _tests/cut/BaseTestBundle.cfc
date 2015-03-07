@@ -83,6 +83,20 @@ component extends='testbox.system.BaseSpec' {
 		expect(arguments.data.currency).toBe(arguments.currency, 'Currency expected to be "#arguments.currency#" but returned "#arguments.data.currency#"');
 	}
 
+	private void function subscriptionTest(required struct data, required string id, required struct offer, required struct payment, boolean cancelled=false, any startDate='') {
+		expect(arguments.data).toBeStruct();
+
+		expect(arguments.data.id).toMatch(arguments.id, 'ID expected to be like "#arguments.id#" but returned "#arguments.data.id#"');
+		expect(arguments.offer).toBeStruct();
+		expect(arguments.offer).toBe(arguments.data.offer, 'Expected Offer not the same as the returned Offer');
+		expect(arguments.payment).toBe(arguments.data.payment, 'Expected Payment not the same as the returned Payment');
+		expect(arguments.cancelled).toBe(arguments.data.cancel_at_period_end, 'Expected Cancel At Period End not the same as the returned');
+
+		if (isDate(arguments.startDate)) {
+			expect(arguments.startDate).toBeCloseTo(arguments.data.next_capture_at, 5, 's', 'Expected Next Capture At not the same as the returned');
+		}
+	}
+
 	private void function statusTest(required any response) {
 		expect(arguments.response).toBeStruct();
 
