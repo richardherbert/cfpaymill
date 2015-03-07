@@ -4,8 +4,7 @@ component extends='cfPaymillTests.cut.BaseTestBundle' {
 
 		application.cfPaymill =  new cfpaymill.cfPaymill(privateKey=response.privateTestKey
 			,publicKey=response.publicTestKey
-			,logfile=expandPath('../') & 'cfPaymill.log'
-			,apiEndpoint='https://api.paymill.com/v2.1/');
+			,logfile=expandPath('../') & 'cfPaymill.log');
 	}
 
 	function afterAll() {
