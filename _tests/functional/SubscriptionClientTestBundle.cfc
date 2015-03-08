@@ -1,4 +1,4 @@
-component extends='cfPaymillTests.cut.paymill-v20.V20TestBundle' {
+component extends='cfPaymillTests.BaseTestBundle' {
 	function beforeAll() {
 		super.beforeAll();
 	}
@@ -20,15 +20,20 @@ component extends='cfPaymillTests.cut.paymill-v20.V20TestBundle' {
 
 				afterEach(function(currentSpec) {});
 
-				it('...with token (#variables.token#) and delayed Start Date.', function() {
+				it('...with token (#variables.token#) and new Client.', function() {
 					var offer = application.cfPaymill.addOffer(amount=variables.amount, currency=variables.currency, interval='1 day', name='1 day');
 					var payment = application.cfPaymill.addPayment(token=variables.token);
+					var customer = application.cfPaymill.addClient(email=variables.emailaddress, description=variables.name);
 
 					variables.offerID = offer.data.id;
 					variables.paymentID = payment.data.id;
-					variables.startDate = dateAdd('d', 10, now());
+					variables.customerID = customer.data.id;
 
-					var subscription = application.cfPaymill.addSubscription(offer=offer.data.id, payment=payment.data.id, startDate=variables.startDate);
+					var subscription = application.cfPaymill.addSubscription(offer=offer.data.id, payment=payment.data.id, client=variables.customerID);
+
+debug( payment );
+debug( customer );
+debug( subscription );
 
 // recall the new Offer and Payment as they will be updated by the Subscription
 					variables.offer = application.cfPaymill.getOffer(variables.offerID);
@@ -40,8 +45,6 @@ component extends='cfPaymillTests.cut.paymill-v20.V20TestBundle' {
 					subscriptionTest(subscription.data, '^sub_*'
 						,variables.offer.data
 						,variables.payment.data
-						,false
-						,variables.startDate
 					);
 					dateTest(subscription.data.created_at);
 					dateTest(subscription.data.updated_at);
@@ -83,31 +86,19 @@ component extends='cfPaymillTests.cut.paymill-v20.V20TestBundle' {
 			describe('...updateSubscription()...', function() {
 				beforeEach(function(currentSpec) {});
 
-				afterEach(function(currentSpec) {
-					application.cfPaymill.deleteOffer(offerID);
-				});
+				afterEach(function(currentSpec) {});
 
-				it('...change Offer.', function() {
-					var offer = application.cfPaymill.addOffer(amount=variables.amount, currency=variables.currency, interval='5 day', name='5 day');
-
-					offerID = offer.data.id;
-
+				it('...cancel Subscription.', function() {
 					var subscription = application.cfPaymill.updateSubscription(id=variables.subscriptionID
-						,cancel=false
+						,cancel=true
 						,payment=variables.paymentID
-						,offer=offerID
 					);
-
-// recall the new Offer as it will be updated by the Subscription
-					offer = application.cfPaymill.getOffer(offerID);
 
 					statusTest(subscription);
 					subscriptionTest(subscription.data, '^sub_*'
-						,offer.data
+						,variables.offer.data
 						,variables.payment.data
-						,false
-						,''
-						,offer.data.id
+						,true
 					);
 					dateTest(subscription.data.created_at);
 					dateTest(subscription.data.updated_at);
@@ -120,6 +111,7 @@ component extends='cfPaymillTests.cut.paymill-v20.V20TestBundle' {
 				afterEach(function(currentSpec) {
 					application.cfPaymill.deleteOffer(variables.offerID);
 					application.cfPaymill.deletePayment(variables.paymentID);
+					application.cfPaymill.deleteClient(variables.customerID);
 				});
 
 				it('...with Subscription ID.', function() {

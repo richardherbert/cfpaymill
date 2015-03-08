@@ -1,4 +1,4 @@
-component extends='cfPaymillTests.cut.paymill-v20.V20TestBundle' {
+component extends='cfPaymillTests.BaseTestBundle' {
 	function beforeAll() {
 		super.beforeAll();
 	}
@@ -21,16 +21,30 @@ component extends='cfPaymillTests.cut.paymill-v20.V20TestBundle' {
 				afterEach(function(currentSpec) {});
 
 				it('...with token (#variables.token#) amount (#variables.amount#) and currency (#variables.currency#).', function() {
+					var customer = application.cfPaymill.addClient(email=variables.emailAddress, description=variables.name);
+					var payment = application.cfPaymill.addPayment(token=variables.token, client=customer.data.id);
+
 					var transaction = application.cfPaymill.addTransaction(amount=variables.amount
 						,currency=variables.currency
-						,token=variables.token
+						,payment=payment.data.id
+						,client=customer.data.id
 					);
 
-					debug(transaction);
+					debug(customer, 'client');
+					debug(payment, 'payment');
+					debug(transaction, 'transaction');
 
 					variables.transactionID = transaction.data.id;
 
 					statusTest(transaction);
+					clientTest(customer.data, '^client_*', variables.emailAddress, variables.name);
+					paymentTest(payment.data, '^pay_*'
+						,variables.type
+						,variables.card_type
+						,variables.country
+						,variables.last4
+						,variables.expiryMonth
+						,variables.expiryYear);
 					transactionTest(transaction.data, '^tran_*'
 						,variables.amount
 						,variables.currency
@@ -55,20 +69,6 @@ component extends='cfPaymillTests.cut.paymill-v20.V20TestBundle' {
 					);
 					dateTest(transaction.data.created_at);
 					dateTest(transaction.data.updated_at);
-				});
-			});
-
-			describe('...getTransactions()...', function() {
-				beforeEach(function(currentSpec) {});
-
-				afterEach(function(currentSpec) {});
-
-				it('...returns an array of transactions.', function() {
-					variables.response = application.cfPaymill.getTransactions();
-
-					statusTest(variables.response);
-
-					expect(variables.response.data).toBeArray();
 				});
 			});
 		});

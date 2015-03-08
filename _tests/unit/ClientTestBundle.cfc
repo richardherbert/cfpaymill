@@ -1,4 +1,4 @@
-component extends='cfPaymillTests.cut.paymill-v20.V20TestBundle' {
+component extends='cfPaymillTests.BaseTestBundle' {
 	function beforeAll() {
 		super.beforeAll();
 	}
