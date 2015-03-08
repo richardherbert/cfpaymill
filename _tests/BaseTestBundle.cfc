@@ -3,7 +3,10 @@ component extends='testbox.system.BaseSpec' {
 		var privateTestKey = 'myPrivateKey';
 		var publicTestKey = 'myPublicKey';
 
-		return local;
+		application.cfPaymill =  new cfpaymill.cfPaymill(privateKey=privateTestKey
+			,publicKey=publicTestKey
+			,logfile=expandPath('../') & 'cfPaymill.log'
+			,apiEndpoint='https://api.paymill.com/v2/');
 	}
 
 	function afterAll() {

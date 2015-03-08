@@ -70,6 +70,8 @@
 				<br>
 				<button class="submitForm" data-component="SubscriptionStartTestBundle.cfc" type="button">Subscription Test with delayed Start Date</button>
 
+				<p><a href="../">unit</a></p>
+
 <!--- ------------------------------------------------- --->
 
 				<input id="card-holdername" type="hidden" value="#data.name#">
@@ -143,7 +145,7 @@
 						options.binCountry = result.binCountry;
 						options.token = result.token;
 
-						var actionURL = '/cfPaymill/_tests/cut/paymill-v20/' + component + '?method=runRemote&options=' + JSON.stringify(options);
+						var actionURL = '/cfPaymill/_tests/functional/' + component + '?method=runRemote&options=' + JSON.stringify(options);
 
 						$("#testingForm").attr('action', actionURL);
 

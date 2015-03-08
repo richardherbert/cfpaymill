@@ -1,4 +1,4 @@
-component extends='cfPaymillTests.cut.paymill-v21.V21TestBundle' {
+component extends='cfPaymillTests.BaseTestBundle' {
 	function beforeAll() {
 		super.beforeAll();
 	}
@@ -11,9 +11,7 @@ component extends='cfPaymillTests.cut.paymill-v21.V21TestBundle' {
 		describe('Client...', function() {
 			beforeEach(function(currentSpec) {});
 
-			afterEach(function(currentSpec) {
-				structDelete(variables, 'response');
-			});
+			afterEach(function(currentSpec) {});
 
 			describe('...getClients()...', function() {
 				beforeEach(function(currentSpec) {});
@@ -109,8 +107,9 @@ component extends='cfPaymillTests.cut.paymill-v21.V21TestBundle' {
 					var customer = application.cfPaymill.deleteClient(variables.response.data.id);
 
 					statusTest(customer);
-					expect(customer.data).toBeArray();
-					expect(customer.data).toBeEmpty();
+					clientTest(customer.data, '^client_*', 'rosamund@pike.com', 'My name is Rosamund Pike');
+					dateTest(customer.data.created_at);
+					dateTest(customer.data.updated_at);
 				});
 			});
 
