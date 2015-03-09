@@ -742,6 +742,14 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 					structUpdate(updatedDate.owner, "updated_at", newValue);
 				}
 
+				captureDates = structFindKey(result.data, "next_capture_at", "all");
+
+				for (captureDate in captureDates) {
+					newValue = getDate(captureDate.value);
+
+					structUpdate(captureDate.owner, "next_capture_at", newValue);
+				}
+
 				amounts = structFindKey(result.data, "amount", "all");
 
 				for (amount in amounts) {
