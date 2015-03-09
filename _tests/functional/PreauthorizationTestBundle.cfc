@@ -26,14 +26,12 @@ component extends='cfPaymillTests.BaseTestBundle' {
 						,token=variables.token
 					);
 
-					debug(preauthorization, 'add preauthorization');
-
 					variables.transactionID = preauthorization.data.id;
-					variables.preauthorizationID = preauthorization.data.preauthorization.id;
+					variables.preauthorizationID = preauthorization.data.id;
 
 					statusTest(preauthorization);
 					preauthorizationTest(preauthorization.data
-						,'^tran_*'
+						,'^preauth_*'
 						,variables.amount
 						,variables.currency
 					);
