@@ -28,7 +28,7 @@ component extends='cfPaymillTests.BaseTestBundle' {
 
 					var transaction = application.cfPaymill.addTransaction(amount=variables.amount
 						,currency=variables.currency
-						,preauthorization=preauthorization.data.preauthorization.id
+						,preauthorization=preauthorization.data.id
 					);
 
 					debug(preauthorization, 'preauthorization');
@@ -38,7 +38,7 @@ component extends='cfPaymillTests.BaseTestBundle' {
 
 					statusTest(transaction);
 					preauthorizationTest(preauthorization.data
-						,'^tran_*'
+						,'^preauth_*'
 						,variables.amount
 						,variables.currency
 					);
