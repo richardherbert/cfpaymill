@@ -575,7 +575,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		var sendResponse = send(packet);
 
 // convert NULL data to an empty array if a client is being deleted (Paymill, WTF, sigh!)
-			if (arguments.object == 'clients') {
+			if (arguments.object == 'clients' || arguments.object == 'payments') {
 				sendResponse.filecontent = reReplaceNoCase(sendResponse.filecontent, '"data":null', '"data":[]', "all");
 			}
 
