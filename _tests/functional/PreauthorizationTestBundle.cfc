@@ -48,9 +48,6 @@ component extends='cfPaymillTests.BaseTestBundle' {
 				it('...with Preauthorization ID.', function() {
 					var preauthorization = application.cfPaymill.getPreauthorization(variables.preauthorizationID);
 
-					debug(variables.transactionID, 'preauthorization ID');
-					debug(preauthorization, 'get preauthorization');
-
 					statusTest(preauthorization);
 					preauthorizationTest(preauthorization.data
 						,'^preauth_*'
