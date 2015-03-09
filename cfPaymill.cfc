@@ -191,6 +191,24 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		return getObjects(object="offers", params=arguments);
 	}
 
+	public struct function deleteOffer(required string id, string deleteSubscriptions="false")
+		hint="I delete the selected Offer"
+	{
+		var packet = {};
+
+		packet.object = "offers";
+		packet.method = "DELETE";
+		packet.id = arguments.id;
+
+		packet.params = [];
+
+		arrayAppend(packet.params, {name="remove_with_subscriptions", value=arguments.deleteSubscriptions});
+
+		var sendResponse = send(packet);
+
+		return processResponse(sendResponse);
+	}
+
 	public struct function updateOffer(required string id, required string name="")
 		hint="I update a Offer"
 	{
@@ -207,12 +225,6 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		var sendResponse = send(packet);
 
 		return processResponse(sendResponse);
-	}
-
-	public struct function deleteOffer(required string id)
-		hint="I delete the selected Offer"
-	{
-		return deleteObject(object="offers", id=arguments.id);
 	}
 
 	public struct function addPayment(required string token, string client="")
@@ -619,6 +631,16 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 
 			case "DELETE":
 				endpointURL &= packet.id;
+
+				if (packet.object == "offers") {
+					for (param in packet.params) {
+						endpointURL = listAppend(endpointURL, "#param.name#=#urlEncodedFormat(param.value)#", "&");
+					}
+
+// replace the first & with ? so the URL is compliant
+					endpointURL = replaceNoCase(endpointURL, "&", "?", "one");
+				}
+
 			break;
 		}
 
