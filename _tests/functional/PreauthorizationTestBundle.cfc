@@ -82,8 +82,6 @@ component extends='cfPaymillTests.BaseTestBundle' {
 					var preauthorization = application.cfPaymill.deletePreauthorization(variables.preauthorizationID);
 
 					statusTest(preauthorization);
-					expect(preauthorization.data).toBeArray();
-					expect(preauthorization.data).toBeEmpty();
 				});
 			});
 		});
