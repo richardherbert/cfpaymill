@@ -410,7 +410,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 	public struct function getSubscriptions(numeric count=20, numeric offset=0)
 		hint="I return a list of Subscriptions"
 	{
-		return getObjects(object="refunds", params=arguments);
+		return getObjects(object="subscriptions", params=arguments);
 	}
 
 	public struct function deleteSubscription(required string id)
