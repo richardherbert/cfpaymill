@@ -662,7 +662,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 			case "DELETE":
 				endpointURL &= packet.id;
 
-				if (packet.object == "offers") {
+				if (packet.object == "offers" || packet.object == "subscriptions") {
 					for (param in packet.params) {
 						endpointURL = listAppend(endpointURL, "#param.name#=#urlEncodedFormat(param.value)#", "&");
 					}
