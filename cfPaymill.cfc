@@ -797,7 +797,11 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 				captureDates = structFindKey(result.data, "next_capture_at", "all");
 
 				for (captureDate in captureDates) {
-					newValue = getDate(captureDate.value);
+					if (isNumeric(captureDate.value)) {
+						newValue = getDate(captureDate.value);
+					} else {
+						newValue = '';
+					}
 
 					structUpdate(captureDate.owner, "next_capture_at", newValue);
 				}
