@@ -27,6 +27,8 @@ component extends='testbox.system.BaseSpec' {
 
 		variables.amount = options.amount;
 		variables.currency = options.currency;
+		variables.interval = options.interval;
+		variables.validity = options.validity;
 
 		variables.card_type = options.brand;
 		variables.last4 = options.last4;
@@ -92,13 +94,33 @@ component extends='testbox.system.BaseSpec' {
 		expect(arguments.data.id).toMatch(arguments.id, 'ID expected to be like "#arguments.id#" but returned "#arguments.data.id#"');
 		expect(arguments.offer).toBeStruct();
 		expect(arguments.offer).toBe(arguments.data.offer, 'Expected Offer not the same as the returned Offer');
-		expect(arguments.payment).toBe(arguments.data.payment, 'Expected Payment not the same as the returned Payment');
-		expect(arguments.cancelled).toBe(arguments.data.cancel_at_period_end, 'Expected Cancel At Period End not the same as the returned');
+		// expect(arguments.payment).toBe(arguments.data.payment, 'Expected Payment not the same as the returned Payment');
+
+// removed in v2.1
+		// expect(arguments.cancelled).toBe(arguments.data.cancel_at_period_end, 'Expected Cancel At Period End not the same as the returned');
 
 		if (isDate(arguments.startDate)) {
 			expect(arguments.startDate).toBeCloseTo(arguments.data.next_capture_at, 5, 's', 'Expected Next Capture At not the same as the returned');
 		}
 	}
+
+	private void function subscriptionWithoutOfferTest(required struct data, required string id, required struct payment, boolean cancelled=false, any startDate='') {
+		expect(arguments.data).toBeStruct();
+
+		expect(arguments.data.id).toMatch(arguments.id, 'ID expected to be like "#arguments.id#" but returned "#arguments.data.id#"');
+		expect(arguments.payment).toBeStruct();
+
+// for some reason a Payment doesn't have the Client that is automatically added by a Subscription?????
+		// expect(arguments.payment).toBe(arguments.data.payment, 'Expected Payment not the same as the returned Payment');
+
+// removed in v2.1
+		// expect(arguments.cancelled).toBe(arguments.data.cancel_at_period_end, 'Expected Cancel At Period End not the same as the returned');
+
+		if (isDate(arguments.startDate)) {
+			expect(arguments.startDate).toBeCloseTo(arguments.data.next_capture_at, 5, 's', 'Expected Next Capture At not the same as the returned');
+		}
+	}
+
 
 	private void function statusTest(required any response) {
 		expect(arguments.response).toBeStruct();

@@ -20,28 +20,30 @@ component extends='cfPaymillTests.BaseTestBundle' {
 
 				afterEach(function(currentSpec) {});
 
-				it('...with token (#variables.token#) and delayed Start Date.', function() {
-					var offer = application.cfPaymill.addOffer(amount=variables.amount, currency=variables.currency, interval='1 day', name='1 day');
-					var payment = application.cfPaymill.addPayment(token=variables.token);
+				it('...with token (#variables.token#) and Amount (#variables.amount#), Currency (#variables.currency#) and Interval (#variables.interval#).', function() {
+					variables.payment = application.cfPaymill.addPayment(token=variables.token);
 
-					variables.offerID = offer.data.id;
-					variables.paymentID = payment.data.id;
-					variables.startDate = dateAdd('d', 10, now());
+// debug( variables.payment, 'payment' );
 
-					var subscription = application.cfPaymill.addSubscription(offer=offer.data.id, payment=payment.data.id, startDate=variables.startDate);
+					variables.paymentID = variables.payment.data.id;
 
-// recall the new Offer and Payment as they will be updated by the Subscription
-					variables.offer = application.cfPaymill.getOffer(variables.offerID);
-					variables.payment = application.cfPaymill.getPayment(variables.paymentID);
+					var subscription = application.cfPaymill.addSubscription(payment=variables.paymentID
+						,amount=variables.amount
+						,currency=variables.currency
+						,interval=variables.interval
+						,validity=variables.validity
+					);
+
+// debug( subscription, 'subscription' );
+// debug( variables.payment, 'payment' );
+// debug( subscription.data.payment, 'subscription.data.payment' );
+
+					statusTest(subscription);
 
 					variables.subscriptionID = subscription.data.id;
 
-					statusTest(subscription);
-					subscriptionTest(subscription.data, '^sub_*'
-						,variables.offer.data
+					subscriptionWithoutOfferTest(subscription.data, '^sub_*'
 						,variables.payment.data
-						,false
-						,variables.startDate
 					);
 					dateTest(subscription.data.created_at);
 					dateTest(subscription.data.updated_at);
@@ -57,8 +59,7 @@ component extends='cfPaymillTests.BaseTestBundle' {
 					var subscription = application.cfPaymill.getSubscription(variables.subscriptionID);
 
 					statusTest(subscription);
-					subscriptionTest(subscription.data, '^sub_*'
-						,variables.offer.data
+					subscriptionWithoutOfferTest(subscription.data, '^sub_*'
 						,variables.payment.data
 					);
 					dateTest(subscription.data.created_at);
@@ -66,25 +67,10 @@ component extends='cfPaymillTests.BaseTestBundle' {
 				});
 			});
 
-			describe('...getSubscriptions()...', function() {
-				beforeEach(function(currentSpec) {});
-
-				afterEach(function(currentSpec) {});
-
-				it('...returns an array of subscriptions.', function() {
-					var subscription = application.cfPaymill.getSubscriptions();
-
-					statusTest(subscription);
-
-					expect(subscription.data).toBeArray();
-				});
-			});
-
 			describe('...deleteSubscription()...', function() {
 				beforeEach(function(currentSpec) {});
 
 				afterEach(function(currentSpec) {
-					application.cfPaymill.deleteOffer(variables.offerID);
 					application.cfPaymill.deletePayment(variables.paymentID);
 				});
 
@@ -92,9 +78,13 @@ component extends='cfPaymillTests.BaseTestBundle' {
 					var subscription = application.cfPaymill.deleteSubscription(variables.subscriptionID);
 					var subscriptionDeleted = application.cfPaymill.getSubscription(variables.subscriptionID);
 
+// debug( subscription, 'subscription' );
+
 					statusTest(subscription);
 
 					expect(subscription.data).toBe(subscriptionDeleted.data, 'Expected Subscription not the same as the returned Subscription');
+					expect(subscription.data.is_canceled).toBeTrue('Expected Subscription is_canceled to be true');
+					expect(subscription.data.is_deleted).toBeTrue('Expected Subscription is_deleted to be true');
 				});
 			});
 		});

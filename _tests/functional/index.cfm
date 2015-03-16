@@ -4,14 +4,14 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
 
-		<title>cfPaymill Functional Testing - Paymill API v2.0</title>
+		<title>cfPaymill Functional Testing - Paymill API v2.1</title>
 	</head>
 
 	<body>
 		<cfoutput>
 			<p>NOTE: Allow popups in browser</p>
 
-			<h1>Functional Tests - Paymill v2.0</h1>
+			<h1>Functional Tests - Paymill v2.1</h1>
 
 			<cfset data = {}>
 
@@ -27,6 +27,8 @@
 
 			<cfset data.amount = 12.99>
 			<cfset data.currency = 'GBP'>
+			<cfset data.interval = '1 day'>
+			<cfset data.validity = '1 week'>
 
 			<form id="testingForm" method="POST" target="_blank">
 				<button id="get-paymill-token" type="button">Get a Paymill Token</button>
@@ -52,8 +54,8 @@
 				<div>CVC: #data.cvc#</div>
 				<div>Expiry month: #data.expiryMonth#</div>
 				<div>Expiry year: #data.expiryYear#</div>
-				<div>Currency: #data.currency#</div>
 				<div>Amount: #data.amount#</div>
+				<div>Currency: #data.currency#</div>
 
 				<button class="submitForm" data-component="TransactionTestBundle.cfc" type="button">Minimal Transaction Test</button>
 				<br>
@@ -62,15 +64,27 @@
 				<button class="submitForm" data-component="TransactionPreauthorizationTestBundle.cfc" type="button">Transaction Test with Preauthorization</button>
 
 				<h2>Subscription</h2>
-				<button class="submitForm" data-component="SubscriptionTestBundle.cfc" type="button">Minimal Subscription Test</button>
+
+				<div>Amount: #data.amount#</div>
+				<div>Currency: #data.currency#</div>
+				<div>Interval: #data.interval#</div>
+				<div>Period of Validity: #data.validity#</div>
+
+				<button class="submitForm" data-component="SubscriptionTestBundle.cfc" type="button">Minimal Subscription Test with Payment and Offer</button>
+				<br>
+				<button class="submitForm" data-component="SubscriptionWithoutOfferTestBundle.cfc" type="button">Minimal Subscription Test with Payment but without Offer</button>
+				<br>
+				<button class="submitForm" data-component="SubscriptionDifferentTestBundle.cfc" type="button">Subscription Test with Payment, Offer but different values (15.23, EUR, 2 week)</button>
 <!---
 				<br>
 				<button class="submitForm" data-component="SubscriptionClientTestBundle.cfc" type="button">Subscription Test with new Client</button>
 --->
 				<br>
 				<button class="submitForm" data-component="SubscriptionStartTestBundle.cfc" type="button">Subscription Test with delayed Start Date</button>
+				<br>
+				<button class="submitForm" data-component="SubscriptionUpdateTestBundle.cfc" type="button">Update Subscription Test</button>
 
-				<p><a href="../">unit</a></p>
+				<p><a href="../">unit tests</a></p>
 
 <!--- ------------------------------------------------- --->
 
@@ -137,6 +151,8 @@
 
 								,currency:'#data.currency#'
 								,amount:'#data.amount#'
+								,interval:'#data.interval#'
+								,validity:'#data.validity#'
 							};
 						</cfoutput>
 
