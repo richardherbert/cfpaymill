@@ -431,6 +431,24 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		return deleteObject(object="subscriptions", id=arguments.id);
 	}
 
+	public struct function cancelSubscription(required string id)
+		hint="I cancel the selected Subscription"
+	{
+		var packet = {};
+
+		packet.object = "subscriptions";
+		packet.method = "DELETE";
+		packet.id = arguments.id;
+
+		packet.params = [];
+
+		arrayAppend(packet.params, {name="remove", value='false'});
+
+		var sendResponse = send(packet);
+
+		return processResponse(sendResponse);
+	}
+
 	public struct function addTransaction(required numeric amount, required string currency, string token="", string payment="", string preauthorization="", string client="", string description="")
 		hint="I create a new Transaction"
 	{
