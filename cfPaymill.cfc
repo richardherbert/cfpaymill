@@ -390,7 +390,19 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		return processResponse(sendResponse);
 	}
 
-	public struct function updateSubscription(required string id, required boolean cancel, required string payment, string offer="")
+	public struct function updateSubscription(required string id
+		,string payment=""
+		,string offer=""
+		,numeric offer_change_type=0
+		,string currency=""
+		,string interval=""
+		,string name=""
+		,string period_of_validity=""
+		,boolean trial_end=false
+		,boolean pause=false
+		,numeric amount=0
+		,numeric amount_change_type=0
+	)
 		hint="I update a Subscription"
 	{
 		var packet = {};
