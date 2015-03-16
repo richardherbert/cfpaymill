@@ -364,7 +364,16 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		return getObjects(object="refunds", params=arguments);
 	}
 
-	public struct function addSubscription(required string offer, required string payment, string client="", date startDate=createDate(1970, 1, 1))
+	public struct function addSubscription(required string payment
+		,string offer=""
+		,string client=""
+		,date startDate=createDate(1970, 1, 1)
+		,string validity=""
+		,numeric amount=0
+		,string currency=""
+		,string interval=""
+		,string name=""
+	)
 		hint="I add a new Subscription"
 	{
 		var packet = {};
@@ -374,8 +383,52 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 
 		packet.params = [];
 
-		arrayAppend(packet.params, {name="offer", value=arguments.offer});
 		arrayAppend(packet.params, {name="payment", value=arguments.payment});
+
+		if (arguments.offer == "") {
+			if (arguments.amount == 0 || arguments.currency == "" || arguments.interval == "") {
+				result["success"] = false;
+				result["code"] = 412;
+				result["status"] = "Missing argument";
+
+				result["error"] = {};
+				result.error["field"] = "";
+
+				result.error["messages"] = {};
+
+				if (arguments.amount == 0) {
+					result.error["field"] = listAppend(result.error["field"], "amount");
+
+					result.error.messages["amount"] = "If no Offer is provided an amount is required";
+				}
+
+				if (trim(arguments.currency) == "") {
+					result.error["field"] = listAppend(result.error["field"], "currency");
+
+					result.error.messages["currency"] = "If no Offer is provided a currency is required";
+				}
+
+				if (trim(arguments.interval) == "") {
+					result.error["field"] = listAppend(result.error["field"], "interval");
+
+					result.error.messages["interval"] = "If no Offer is provided an interval is required";
+				}
+
+				return result;
+			}
+
+			arrayAppend(packet.params, {name="amount", value=convertAmountToBase(arguments.amount)});
+			arrayAppend(packet.params, {name="currency", value=arguments.currency});
+			arrayAppend(packet.params, {name="interval", value=arguments.interval});
+		} else {
+			arrayAppend(packet.params, {name="offer", value=arguments.offer});
+
+			if (arguments.amount > 0) {
+				arrayAppend(packet.params, {name="amount", value=convertAmountToBase(arguments.amount)});
+				arrayAppend(packet.params, {name="currency", value=arguments.currency});
+				arrayAppend(packet.params, {name="interval", value=arguments.interval});
+			}
+		}
 
 		if (arguments.client != "") {
 			arrayAppend(packet.params, {name="client", value=arguments.client});
@@ -384,6 +437,9 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 		if (arguments.startDate != createDate(1970, 1, 1)) {
 			arrayAppend(packet.params, {name="start_at", value=getEpochTimeFromLocal(arguments.startDate)});
 		}
+
+		arrayAppend(packet.params, {name="period_of_validity", value=arguments.validity});
+		arrayAppend(packet.params, {name="name", value=arguments.name});
 
 		var sendResponse = send(packet);
 
