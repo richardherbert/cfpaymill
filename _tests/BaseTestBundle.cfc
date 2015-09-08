@@ -64,7 +64,6 @@ component extends='testbox.system.BaseSpec' {
 		expect(arguments.data.id).toMatch(arguments.id, 'ID expected to be like "#arguments.id#" but returned "#arguments.data.id#"');
 		expect(arguments.data.type).toBe(arguments.type, 'Type expected to be "#arguments.type#" but returned "#arguments.data.type#"');
 		expect(arguments.data.card_type).toBe(arguments.card_type, 'Card Type expected to be "#arguments.card_type#" but returned "#arguments.data.card_type#"');
-		expect(arguments.data.country).toBe(arguments.country, 'Country expected to be "#arguments.country#" but returned "#arguments.data.country#"');
 		expect(arguments.data.last4).toBe(arguments.last4, 'Last 4 expected to be "#arguments.last4#" but returned "#arguments.data.last4#"');
 		expect(arguments.data.expire_month).toBe(arguments.expire_month, 'Expiry Month expected to be "#arguments.expire_month#" but returned "#arguments.data.expire_month#"');
 		expect(arguments.data.expire_year).toBe(arguments.expire_year, 'Expiry Year expected to be "#arguments.expire_year#" but returned "#arguments.data.expire_year#"');
