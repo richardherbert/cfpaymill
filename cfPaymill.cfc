@@ -88,7 +88,7 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 	public string function getVersion()
 		hint="I return the current version number"
 	{
-		return "0.3.5";
+		return "0.3.6";
 	}
 
 	public string function getPrivateKey()
@@ -708,6 +708,14 @@ component output="false" displayname="cfPaymill" hint="I am a ColdFusion compone
 					newValue = getDate(updatedDate.value);
 
 					structUpdate(updatedDate.owner, "updated_at", newValue);
+				}
+
+				captureDates = structFindKey(result.data, "next_capture_at", "all");
+
+				for (captureDate in captureDates) {
+					newValue = getDate(captureDate.value);
+
+					structUpdate(captureDate.owner, "next_capture_at", newValue);
 				}
 
 				amounts = structFindKey(result.data, "amount", "all");

@@ -1,4 +1,4 @@
-component extends='cfPaymillTests.cut.paymill-v20.V20TestBundle' {
+component extends='cfPaymillTests.BaseTestBundle' {
 	function beforeAll() {
 		super.beforeAll();
 	}
@@ -11,9 +11,7 @@ component extends='cfPaymillTests.cut.paymill-v20.V20TestBundle' {
 		describe('Client...', function() {
 			beforeEach(function(currentSpec) {});
 
-			afterEach(function(currentSpec) {
-				structDelete(variables, 'response');
-			});
+			afterEach(function(currentSpec) {});
 
 			describe('...getClients()...', function() {
 				beforeEach(function(currentSpec) {});
