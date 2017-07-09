@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+		<title>ColdFusion API for Paymill Payment Services</title>
+
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width">
+
+
+		<base href="/"></base>
+
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+
+		<style>
+			body {
+				padding-top: 60px;
+				padding-bottom: 40px;
+			}
+		</style>
+
+		<link rel="stylesheet" href="css/bootstrap-responsive.min.css">
+		<link rel="stylesheet" href="css/main.css">
+
+		<script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+	</head>
+
+	<body>
+		<!--[if lt IE 7]>
+			<p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+		<![endif]-->
+
+		<div class="navbar navbar-inverse navbar-fixed-top">
+			<div class="navbar-inner">
+				<div class="container">
+					<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</a>
+
+					<a class="brand" href="/">cfPaymill</a>
+
+					<div class="nav-collapse collapse">
+						<ul class="nav">
+
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">Change Log <b class="caret"></b></a>
+								<ul class="dropdown-menu">
+									<li class=""><a href="/changelog/cfpaymill.html">cfPaymill.cfc</a></li>
+									<li class=""><a href="/changelog/website.html">Website</a></li>
+								</ul>
+							</li>
+
+							<li class=""><a href="/contact.html">Contact</a></li>
+ 						</ul>
+
+
+
+
+
+
+  					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="container">
+			<div  class="row-fluid">
+				<div  class="span12">
+
+
+
+	<div  class="row-fluid">
+		<div  class="span2  well well-small hidden-print">
+			<ul class="nav nav-list">
+				<li class="nav-header">Setup</li>
+				<li><a href="/v20">installation</a></li>
+				<li><a href="/v20">init()</a></li>
+
+				<li class="nav-header">Clients</li>
+				<li><a href="/v20#addClient">addClient()</a></li>
+				<li><a href="/v20#getClient">getClient()</a></li>
+				<li><a href="/v20#getClients">getClients()</a></li>
+				<li><a href="/v20#updateClient">updateClient()</a></li>
+				<li><a href="/v20#deleteClient">deleteClient()</a></li>
+
+				<li class="nav-header">Offers</li>
+				<li><a href="/v20#addOffer">addOffer()</a></li>
+				<li><a href="/v20#getOffer">getOffer()</a></li>
+				<li><a href="/v20#getOffers">getOffers()</a></li>
+				<li><a href="/v20#updateOffer">updateOffer()</a></li>
+				<li><a href="/v20#deleteOffer">deleteOffer()</a></li>
+
+				<li class="nav-header">Payments</li>
+				<li><a href="/v20#addPayment">addPayment()</a></li>
+				<li><a href="/v20#getPayment">getPayment()</a></li>
+				<li><a href="/v20#getPayments">getPayments()</a></li>
+
+				<li class="nav-header">Preauthorizations</li>
+
+				<li class="nav-header">Refunds</li>
+
+				<li class="nav-header">Subscriptions</li>
+
+				<li class="nav-header">Transactions</li>
+				<li><a href="/v20#addTransaction">addTransaction()</a></li>
+				<li><a href="/v20#getTransaction">getTransaction()</a></li>
+				<li><a href="/v20#getTransactions">getTransactions()</a></li>
+			</ul>
+		</div>
+
+		<div  class="span10">
+			<h1>documentation</h1>
+
+			<p>This documenation covers the ColdFusion cfPaymill (v0.3.6) wrapper component for the deprecated <a href="https://developers.paymill.com/download/api-reference-v2.pdf">Paymill v2.0 API</a> service.</p>
+
+			<h3 id="installation">installation</h3>
+
+			<p>Download the <a href="https://github.com/richardherbert/cfPaymill/tree/v0.3.6">v0.3.6 tagged version</a> from the GitHub repository. Extract the file <code>cfPaymill.cfc</code> from the downloaded zip and place it in a location that is accessible to ColdFusion. That could be either in the webroot or a mapped directory specified in the ColdFusion Administrator or <code>Application.cfc</code> using the <code>this.mappings</code> setting.</p>
+
+			<hr />
+
+
+
+
+	<h3 id="init">init()</h3>
+
+	<p>I instaniate and return a cfPaymill object.</p>
+
+	<h4>Example</h4>
+	<pre>cfPaymill = createObject("component", "cfPaymill").init(privateKey="8a4d1230504c19caf55d02f150730afa", publicKey="148466278085160bc9d8ee20b29d279f", apiEndpoint="https://api.paymill.com/v2/")</pre>
+
+	<h4>Arguments</h4>
+
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>Argument</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<tr>
+				<td>privateKey (required, string)</td>
+				<td>I am the private key of the account as provided by Paymill. This must be either the test key or the live key.</td>
+			</tr>
+			<tr>
+				<td>publicKey (optional, string="")</td>
+				<td>I am the public key of the account as provided by Paymill. This must be either the test key or the live key.</td>
+			</tr>
+			<tr>
+				<td>apiEndpoint (optional, string="https://api.paymill.com/v2/")</td>
+				<td>I am the the URL of the Paymill REST API service.</td>
+			</tr>
+		</tbody>
+	</table>
+
+
+
+
+
+
+	<h3 id="addClient" class="methodtitle" data-offset-top="200">addClient()</h3>
+
+	<p>I create a <a href="https://developers.paymill.com/download/api-reference-v2.pdf">Paymill Client object</a> and return the result as a structure.</p>
+
+	<h4>Example</h4>
+	<pre>client = cfPaymill.addClient(email="jack@nicholson.com", description="Jack Nicholson")</pre>
+
+	<h4>Arguments</h4>
+
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>Argument</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<tr>
+				<td>email (optional, string="")</td>
+				<td>I am the Client email address.</td>
+			</tr>
+			<tr>
+				<td>description (optional, string="")</td>
+				<td>I am a description of the Client. I could be the client's name or I could be a reference to the database primary key for the client record.</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<h4>Response</h4>
+
+	<img src="image/documentation-v20/addClient.gif" />
+
+
+
+
+
+
+
+	<h3 id="getClient" class="methodtitle">getClient()</h3>
+
+	<p>
+		I get a
+		<a href="https://developers.paymill.com/download/api-reference-v2.pdf">Paymill Client object</a>
+		and return the result as a structure.
+	</p>
+
+	<h4>Example</h4>
+	<pre>client = cfPaymill.getClient(id="client_c2c4472b91660675567a")</pre>
+
+	<h4>Arguments</h4>
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>Argument</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<tr>
+				<td>id (required, string)</td>
+				<td>I am the ID of an existing Client.</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<h4>Response</h4>
+
+	<img src="image/documentation-v20/getClient.gif" />
+
+
+
+
+
+
+
+
+	<h3 id="getClients" class="methodtitle">getClients()</h3>
+
+	<p>
+		I get all the
+		<a href="https://developers.paymill.com/download/api-reference-v2.pdf">Paymill Client objects</a>
+		and return the result as a structure.
+	</p>
+
+	<h4>Example</h4>
+	<pre>clients = cfPaymill.getClients(count=5, offset=20, orderFilter1="value1", orderFilter2="value2", orderFilter3="value3", etc.)</pre>
+
+	<h4>Arguments</h4>
+
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>Argument</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<tr>
+				<td>count (optional, numeric=20)</td>
+				<td>
+					I am the number of records returned.
+				</td>
+			</tr>
+			<tr>
+				<td>offset (optional, numeric=0)</td>
+				<td>
+					I am the offset of the first record returned.
+				</td>
+			</tr>
+			<tr>
+				<td>orderFilter (optional, string="")</td>
+				<td>
+					I am a Paymill order field or filter value that follows the
+					<a href="https://developers.paymill.com/API/#document-common-list">Paymill documentation</a>
+					. For example, order="amount_asc" and/or description="Joan Crawford" etc.
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<h4>Response</h4>
+
+	<img src="image/documentation-v20/getClients.gif" />
+
+
+
+
+
+
+
+
+
+	<h3 id="updateClient" class="methodtitle">updateClient()</h3>
+
+	<p>
+		I update a
+		<a href="https://developers.paymill.com/download/api-reference-v2.pdf">Paymill Client object</a>
+		and return the result as a structure.
+	</p>
+
+	<h4>Example</h4>
+	<pre>client = cfPaymill.updateClient(id="client_c2c4472b91660675567a", email="jack@nicholson.com", description="Jack Nicholson")</pre>
+
+	<h4>Arguments</h4>
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>Argument</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<tr>
+				<td>id (required, string)</td>
+				<td>I am the ID of an existing Client.</td>
+			</tr>
+			<tr>
+				<td>email (optional, string="")</td>
+				<td>I am the Client email address.</td>
+			</tr>
+			<tr>
+				<td>description (optional, string="")</td>
+				<td>
+					I am a description of the Client. I could be the client's name or I could be a reference to the database primary key for the client.
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<h4>Response</h4>
+
+	<img src="image/documentation-v20/updateClient.gif" />
+
+
+
+
+
+
+
+
+
+	<h3 id="deleteClient" class="methodtitle">deleteClient()</h3>
+
+	<p>
+		I delete an existing
+		<a href="https://developers.paymill.com/download/api-reference-v2.pdf">Paymill Client object</a>
+		and return the result as a structure.
+	</p>
+
+	<h4>Example</h4>
+	<pre>client = cfPaymill.deleteClient(id="client_c2c4472b91660675567a")</pre>
+
+	<h4>Arguments</h4>
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>Argument</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<tr>
+				<td>id (required, string)</td>
+				<td>I am the ID of an existing Client.</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<h4>Response</h4>
+
+	<img src="image/documentation-v20/deleteClient.gif" />
+
+
+
+
+
+
+
+
+
+	<h3 id="addOffer" class="methodtitle" data-offset-top="200">addOffer()</h3>
+
+	<p>
+		I create a
+		<a href="https://developers.paymill.com/download/api-reference-v2.pdf">Paymill Offer object</a>
+		and return the result as a structure.
+	</p>
+
+	<h4>Example</h4>
+	<pre>offer = cfPaymill.addOffer(amount="42.71", currency="GBP", interval="21 DAY", name="Life Insurance")</pre>
+
+	<h4>Arguments</h4>
+
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>Argument</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<tr>
+				<td>amount (required, decimal)</td>
+				<td>I am the Offer amount.</td>
+			</tr>
+			<tr>
+				<td>currency (required, string)</td>
+				<td>
+					I am the
+					<a href="http://en.wikipedia.org/wiki/ISO_4217">ISO 4217</a>
+					currency code to be used for the Offer.
+				</td>
+			</tr>
+			<tr>
+				<td>interval (required, string)</td>
+				<td>
+					I am the interval between charges on the Client's account. An interval is expressed by a integer following by a period of either DAY, WEEK, MONTH or YEAR. For example "3 WEEK".
+				</td>
+			</tr>
+			<tr>
+				<td>name (required, string)</td>
+				<td>I am the name of the Offer.</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<h4>Response</h4>
+
+	<img src="image/documentation-v20/addOffer.gif" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<h3 id="getOffer" class="methodtitle">getOffer()</h3>
+
+	<p>
+		I get a
+		<a href="https://developers.paymill.com/download/api-reference-v2.pdf">Paymill Offer object</a>
+		and return the result as a structure.
+	</p>
+
+	<h4>Example</h4>
+	<pre>offer = cfPaymill.getOffer(id="offer_6551988075034162d14c")</pre>
+
+	<h4>Arguments</h4>
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>Argument</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<tr>
+				<td>id (required, string)</td>
+				<td>I am the ID of an existing Offer.</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<h4>Response</h4>
+
+	<img src="image/documentation-v20/getOffer.gif" />
+
+
+
+
+
+
+
+
+
+
+
+
+	<h3 id="getOffers" class="methodtitle">getOffers()</h3>
+
+	<p>
+		I get all the
+		<a href="https://developers.paymill.com/download/api-reference-v2.pdf">Paymill Offer objects</a>
+		and return the result as a structure.
+	</p>
+
+	<h4>Example</h4>
+	<pre>offers = cfPaymill.getOffers(count=5, offset=20, orderFilter1="value1", orderFilter2="value2", orderFilter3="value3", etc.)</pre>
+
+	<h4>Arguments</h4>
+
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>Argument</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<tr>
+				<td>count (optional, numeric=20)</td>
+				<td>
+					I am the number of records returned.
+				</td>
+			</tr>
+			<tr>
+				<td>offset (optional, numeric=0)</td>
+				<td>
+					I am the offset of the first record returned.
+				</td>
+			</tr>
+			<tr>
+				<td>orderFilter (optional, string="")</td>
+				<td>
+					I am a Paymill order field or filter value that follows the
+					<a href="https://developers.paymill.com/API/#document-common-list">Paymill documentation</a>
+					.
+					For example, order="amount_asc" and/or name="Magazine Subscription" etc.
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<h4>Response</h4>
+
+	<img src="image/documentation-v20/getOffers.gif" />
+
+
+
+
+
+
+
+
+
+
+	<h3 id="updateOffer" class="methodtitle">updateOffer()</h3>
+
+	<p>
+		I update a
+		<a href="https://developers.paymill.com/download/api-reference-v2.pdf">Paymill Offer object</a>
+		and return the result as a structure.
+	</p>
+
+	<h4>Example</h4>
+	<pre>offer = cfPaymill.updateOffer(id="offer_bbb34ecffc5b07f4baf2", name="Magazine Subscription")</pre>
+
+	<h4>Arguments</h4>
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>Argument</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<tr>
+				<td>id (required, string)</td>
+				<td>I am the ID of an existing Offer.</td>
+			</tr>
+			<tr>
+				<td>name (required, string="")</td>
+				<td>I am the name of the Offer.</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<h4>Response</h4>
+
+	<img src="image/documentation-v20/updateOffer.gif" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<h3 id="deleteOffer" class="methodtitle">deleteOffer()</h3>
+
+	<p>
+		I delete an existing
+		<a href="https://developers.paymill.com/download/api-reference-v2.pdf">Paymill Offer object</a>
+		and return the result as a structure.
+	</p>
+
+	<h4>Example</h4>
+	<pre>offer = cfPaymill.deleteOffer(id="offer_b36e949b8851b8f0e199")</pre>
+
+	<h4>Arguments</h4>
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>Argument</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<tr>
+				<td>id (required, string)</td>
+				<td>I am the ID of an existing Offer.</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<h4>Response</h4>
+
+	<img src="image/documentation-v20/deleteOffer.gif" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<h3 id="addPayment" class="methodtitle" data-offset-top="200">addPayment()</h3>
+
+	<p>
+		I create a
+		<a href="https://developers.paymill.com/download/api-reference-v2.pdf">Paymill Payment object</a>
+		and return the result as a structure.
+	</p>
+
+	<h4>Example</h4>
+	<pre>payment = cfPaymill.addPayment(token="098f6bcd4621d373cade4e832627b4f6", client="client_c2c4472b91660675567a")</pre>
+
+	<h4>Arguments</h4>
+
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>Argument</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<tr>
+				<td>token (required, string)</td>
+				<td>
+					I am the Paymill credit card token returned from the Paymill Bridge.
+				</td>
+			</tr>
+			<tr>
+				<td>client (optional, string="")</td>
+				<td>
+					I am the Client ID returned when a new Client is created. If supplied, the selected Client is associated with the Payment.
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<h4>Response</h4>
+
+	<img src="image/documentation-v20/addPayment.gif" />
+
+
+
+
+
+
+
+
+	<h3 id="getPayment" class="methodtitle">getPayment()</h3>
+
+	<p>
+		I get a
+		<a href="https://developers.paymill.com/download/api-reference-v2.pdf">Paymill Payment object</a>
+		and return the result as a structure.
+	</p>
+
+	<h4>Example</h4>
+	<pre>payment = cfPaymill.getPayment(id="pay_cd824ab3101ca82bbafe2b10cfbe")</pre>
+
+	<h4>Arguments</h4>
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>Argument</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<tr>
+				<td>id (required, string)</td>
+				<td>I am the ID of an existing Payment.</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<h4>Response</h4>
+
+	<img src="image/documentation-v20/getPayment.gif" />
+
+
+
+
+
+
+
+	<h3 id="getPayments" class="methodtitle">getPayments()</h3>
+
+	<p>
+		I get all the
+		<a href="https://developers.paymill.com/download/api-reference-v2.pdf">Paymill Payment objects</a>
+		and return the result as a structure.
+	</p>
+
+	<h4>Example</h4>
+	<pre>payments = cfPaymill.getPayments(count=5, offset=20, orderFilter1="value1", orderFilter2="value2", orderFilter3="value3", etc.)</pre>
+
+	<h4>Arguments</h4>
+
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>Argument</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<tr>
+				<td>count (optional, numeric=20)</td>
+				<td>
+					I am the number of records returned.
+				</td>
+			</tr>
+			<tr>
+				<td>offset (optional, numeric=0)</td>
+				<td>
+					I am the offset of the first record returned.
+				</td>
+			</tr>
+			<tr>
+				<td>orderFilter (optional, string="")</td>
+				<td>
+					I am a Paymill order field or filter value that follows the
+					<a href="https://developers.paymill.com/API/#document-common-list">Paymill documentation</a>
+					. For example, order="expire_year_asc" and/or card_type="Visa" etc.
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<h4>Response</h4>
+
+	<img src="image/documentation-v20/getPayments.gif" />
+
+
+
+
+
+
+
+
+
+	<h3 id="addTransaction" class="methodtitle" data-offset-top="200">addTransaction()</h3>
+
+	<p>I create a <a href="https://developers.paymill.com/download/api-reference-v2.pdf">Paymill Transaction object</a> and return the result as a structure.</p>
+
+	<h4>Example</h4>
+	<pre>transaction = cfPaymill.addTransaction(amount="10.24", currency="GBP", token="098f6bcd4621d373cade4e832627b4f6", client="client_c2c4472b91660675567a", description="Purchase of film memorabilia")</pre>
+
+	<h4>Arguments</h4>
+
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>Argument</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<tr>
+				<td>amount (required, decimal)</td>
+				<td>I am the amount of the Transaction expressed in the base currency units. Cents for Euro and Dollar transactions. Pence for British Pounds.</td>
+			</tr>
+			<tr>
+				<td>currency (required, string)</td>
+				<td>I am the <a href="http://en.wikipedia.org/wiki/ISO_4217">ISO 4217</a> currency code to be used for the Transaction.</td>
+			</tr>
+			<tr>
+				<td>token (optional, string="")</td>
+				<td>I am the Paymill credit card token returned from the Paymill Bridge. If supplied, a Payment and/or Preauthorization must not be provided.</td>
+			</tr>
+			<tr>
+				<td>payment (optional, string="")</td>
+				<td>I am the Payment ID returned when a new Payment is created. If supplied, a Token and/or Preauthorization must not be provided.</td>
+			</tr>
+			<tr>
+				<td>preauthorization (optional, string="")</td>
+				<td>I am the Preauthorization ID returned when a new Preauthorization is created. If supplied, a Token and/or Payment must not be provided.</td>
+			</tr>
+			<tr>
+			<tr>
+				<td>client (optional, string="")</td>
+				<td>I am the Client ID returned when a new Client is created. If a Token or Preauthorization is supplied, the Client value is ignored. If a Client is supplied a new Payment must also be supplied.</td>
+			</tr>
+				<td>description (optional, string="")</td>
+				<td></td>
+			</tr>
+		</tbody>
+	</table>
+
+	<h4>Response</h4>
+
+
+
+
+
+
+
+
+	<h3 id="getTransaction" class="methodtitle">getTransaction()</h3>
+
+	<p>I get a <a href="https://developers.paymill.com/download/api-reference-v2.pdf">Paymill Transaction object</a> and return the result as a structure.</p>
+
+	<h4>Example</h4>
+	<pre>transaction = cfPaymill.getTransaction(id="tran_2e1b80b967ad323e9e3deb6cbe63")</pre>
+
+	<h4>Arguments</h4>
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>Argument</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<tr>
+				<td>id (required, string)</td>
+				<td>I am the ID of an existing Transaction.</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<h4>Response</h4>
+
+
+
+
+
+
+	<h3 id="getTransactions" class="methodtitle">getTransactions()</h3>
+
+	<p>
+		I get all the
+		<a href="https://developers.paymill.com/download/api-reference-v2.pdf">Paymill Transaction objects</a>
+		and return the result as a structure.
+	</p>
+
+	<h4>Example</h4>
+	<pre>transactions = cfPaymill.getTransactions(count=5, offset=20, orderFilter1="value1", orderFilter2="value2", orderFilter3="value3", etc.)</pre>
+
+	<h4>Arguments</h4>
+
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>Argument</th>
+				<th>Description</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<tr>
+				<td>count (optional, numeric=20)</td>
+				<td>
+					I am the number of records returned.
+				</td>
+			</tr>
+			<tr>
+				<td>offset (optional, numeric=0)</td>
+				<td>
+					I am the offset of the first record returned.
+				</td>
+			</tr>
+			<tr>
+				<td>orderFilter (optional, string="")</td>
+				<td>
+					I am a Paymill order field or filter value that follows the
+					<a href="https://developers.paymill.com/API/#document-common-list">Paymill documentation</a>
+					. For example, order="amount_asc" and/or currency="gbp" etc.
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<h4>Response</h4>
+
+	<img src="image/documentation-v20/getTransactions.gif" />
+
+
+
+
+
+
+
+		</div>
+	</div>
+
+				</div>
+			</div>
+
+			<footer>
+				<hr />
+
+				<p>&copy;Richard Herbert 2013-2017  (Code: v0.4 / Documenation: v0.4)</p>
+			</footer>
+ 		</div>
+
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+
+		<script src="js/vendor/bootstrap.min.js"></script>
+		<script src="js/main.js"></script>
+
+		<script type="text/javascript">
+			var PAYMILL_PUBLIC_KEY = '39807165956a5f3404fa8225d24b887a';
+		</script>
+
+		<script type="text/javascript" src="https://bridge.paymill.com/"></script>
+
+		<script type="text/javascript">
+			$(document).ready(function() {
+				function PaymillResponseHandler(error, result) {
+					if (error) {
+// Displays the error above the form
+						$(".payment-errors").text(error.apierror);
+					} else {
+						var form = $("#payment-form");
+// Output token
+						var token = result.token;
+
+// Insert token into form in order to submit to server
+						form.append("<input type='hidden' name='paymillToken' value='" + token + "' />");
+
+// Submit form
+						form.get(0).submit();
+					}
+				};
+
+				$("#payment-form").submit(function(event) {
+					$('.submit-button').attr("disabled", "disabled");
+					paymill.createToken({
+						number: $('.card-number').val(),
+						exp_month: $('.card-expiry-month').val(),
+						exp_year: $('.card-expiry-year').val(),
+						cvc: $('.card-cvc').val(),
+						amount_int: $('.card-amount-int').val(),
+						currency: $('.card-currency').val(),
+						cardholder: $('.card-holdername').val()
+					}, PaymillResponseHandler);
+
+					return false;
+				});
+			});
+		</script>
+
+
+			<script type="text/javascript">
+				var _gaq = _gaq || [];
+				_gaq.push(['_setAccount', 'UA-893499-14']);
+				_gaq.push(['_trackPageview']);
+
+				(function() {
+				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+				})();
+			</script>
+
+	</body>
+</html>
+
