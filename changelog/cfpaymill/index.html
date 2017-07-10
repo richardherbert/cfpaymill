@@ -1,0 +1,134 @@
+---
+layout: default
+---
+
+<div  class="row-fluid">
+	<div  class="span12">
+		<h1>changelog &gt; cfpaymill.cfc</h1>
+	</div>
+</div>
+
+<div  class="row-fluid">
+	<div  class="span12">
+		<table class="table table-striped table-bordered table-condensed">
+			<thead>
+				<tr>
+					<th>Version</th>
+					<th>Date</th>
+					<th>Change</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<tr>
+					<td>0.3.6</td>
+					<td>8&nbsp;March&nbsp;2015</td>
+					<td>
+						<ol>
+							<li>Subscription "next_capture_at" converted to ColdFusion date object.</li>
+							<li>TextBox unit tests for Paymill v2.0 API added.</li>
+						</ol>
+					</td>
+				</tr>
+				<tr>
+					<td>0.3.5</td>
+					<td>23&nbsp;February&nbsp;2015</td>
+					<td>
+						<ol>
+							<li>Method getSubscription() was incorrectly set to return "refunds" now changed to "subscriptions". Thanks to Yogesh Mathur - https://github.com/ymathur</li>
+							<li>Paymill requires parameters names to be lower case and ColdFusion returns structure keys as upper case. Parameters forced to lower case.</li>
+						</ol>
+					</td>
+				</tr>
+				<tr>
+					<td>0.3.4</td>
+					<td>22&nbsp;May&nbsp;2014</td>
+					<td>
+						<ol>
+							<li>Trap and reports the reason for a failed card. Thanks to John Whish - https://github.com/aliaspooryorik</li>
+						</ol>
+					</td>
+				</tr>
+				<tr>
+					<td>0.3.3</td>
+					<td>15&nbsp;May&nbsp;2014</td>
+					<td>
+						<ol>
+							<li>Method getPrivateKey() added</li>
+							<li>Method getPublicKey() added</li>
+						</ol>
+					</td>
+				</tr>
+				<tr>
+					<td>0.3.2</td>
+					<td>23&nbsp;February&nbsp;2014</td>
+					<td>
+						<ol>
+							<li>Method of authorization changed.</li>
+							<li>Method updateSubscription() argument payment added and default value for offer added.</li>
+							<li>Paymill response code messages added.</li>
+							<li>Array of epochDatesToConvert added.</li>
+							<li>Method deletePayment() added.</li>
+							<li>Default values for addPreauthorization() payment and token arguments added.</li>
+							<li>Method addSubscription() argument order changed and handling of no client argument added.</li>
+							<li>Method parseWebhook() added.</li>
+							<li>Method getResponseMessage() added.</li>
+							<li>Replace all the "null" subscription values in the JSON packet with a ColdFusion empty array.</li>
+							<li>Method getEpochTimeFromLocal() added.</li>
+							<li>Method convertAmountsFromBase() added.</li>
+							<li>Method replaceWithCallback() added.</li>
+						</ol>
+					</td>
+				</tr>
+				<tr>
+					<td>0.2.2</td>
+					<td>24&nbsp;September&nbsp;2013</td>
+					<td>
+						<ol>
+							<li>Support for logging Paymill requests and responses for debugging purposes added.</li>
+						</ol>
+					</td>
+				</tr>
+				<tr>
+					<td>0.2.1</td>
+					<td>9&nbsp;June&nbsp;2013</td>
+					<td>
+						<ol>
+							<li>Default values for the optional count and offset arguments for the gets() methods, e.g. getClients() added.</li>
+							<li>Missing getTransaction() method added.</li>
+						</ol>
+					</td>
+				</tr>
+				<tr>
+					<td>0.2</td>
+					<td>27&nbsp;May&nbsp;2013</td>
+					<td>
+						<ol>
+							<li>Support for the Paymill Offer object added.</li>
+							<li>The data type of "amount" changed from integer to decimal. When submitting and retrieving an amount
+						it is now no longer necessary to convert the currency amount to or from an integer.</li>
+						</ol>
+					</td>
+				</tr>
+				<tr>
+					<td>0.1.1</td>
+					<td>13&nbsp;May&nbsp;2013</td>
+					<td>
+						<ol>
+							<li>Missing var declaration for "result" in addPreauthorization() and addTransaction() added. Credit to Manoj Sudra for spotting my oversight.</li>
+						</ol>
+					</td>
+				</tr>
+				<tr>
+					<td>0.1</td>
+					<td>5&nbsp;May&nbsp;2013</td>
+					<td>
+						<ol>
+							<li>Initial release.</li>
+						</ol>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
