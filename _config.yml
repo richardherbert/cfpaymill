@@ -1,2 +1,4 @@
 url: "https://richardherbert.github.io"
 baseurl: "/cfpaymill"
+
+current_version: "0.3.6"

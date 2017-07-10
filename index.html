@@ -20,7 +20,7 @@ layout: default
 
 		<div  style="margin-top:50px;margin-bottom:50px;" class="row-fluid">
 			<div  class="span12  text-center">
-				<a class="btn btn-success btn-large " href="https://github.com/richardherbert/cfPaymill">Download cfPaymill v0.3.6 from GitHub</a>
+				<a class="btn btn-success btn-large " href="https://github.com/richardherbert/cfPaymill">Download cfPaymill v{{ site.current_version }} from GitHub</a>
 			</div>
 		</div>
 
@@ -39,7 +39,7 @@ layout: default
 
 			<p>Then build your payment form. You could use the <a href="https://www.paymill.com/en-gb/documentation-3/introduction/payment-form/">Paymill example</a> as a starter. Don't forget to replace the public key in the example with the one given to you when you signed up. Also change the form action value to point to the ColdFusion page that will process the request.<p>
 
-			<p>Visit the cfPaymill page on GitHub, <a href="https://github.com/richardherbert/cfPaymill">download the latest version</a> (currently 0.3.6), then drop the component <code>cfPaymill.cfc</code> into the webroot of your website.</p>
+			<p>Visit the cfPaymill page on GitHub, <a href="https://github.com/richardherbert/cfPaymill">download the latest version</a> (currently {{ site.current_version }}), then drop the component <code>cfPaymill.cfc</code> into the webroot of your website.</p>
 
 			<p>Finally, in your form action processing page, you just need add...</p>
 
@@ -58,6 +58,6 @@ apiEndpoint="https://api.paymill.com/v2/")&gt;
 
 		<h3>Requirements</h3>
 
-		<p>Paymill account, Adobe ColdFusion 9.0+, Lucee 4.5, Railo 3.3+</p>
+		<p>Paymill account, Adobe ColdFusion 9.0+, Lucee 4.5+, Railo 3.3+</p>
 	</div>
 </div>
